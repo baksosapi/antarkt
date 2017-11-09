@@ -1,0 +1,34 @@
+package models.entidades;
+
+import org.jongo.marshall.jackson.oid.MongoObjectId;
+
+public abstract class Entidad {
+	
+	@MongoObjectId
+	private String id;
+	
+	public abstract getNombre();
+	public abstract getId();
+	private String nombre;
+	private java.time.LocalDate creadoEn;
+	
+	public void setId(String id) {
+		this.id = id;
+	}
+	public void setNombre(String nombre) {
+		this.nombre = nombre;
+	}
+	public void setCreadoEn(java.time.LocalDate creadoEn) {
+		this.creadoEn = creadoEn;
+	}
+	public java.time.LocalDate getCreadoEn() {
+		return creadoEn;
+	}
+	public String getId() {
+		return id;
+	}
+	public String getNombre() {
+		return nombre;
+	}
+	
+}

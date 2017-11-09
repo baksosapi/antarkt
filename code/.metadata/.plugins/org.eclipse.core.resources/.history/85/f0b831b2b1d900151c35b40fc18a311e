@@ -1,0 +1,58 @@
+package servicios.dao;
+
+import java.util.Random;
+
+import javax.inject.Inject;
+import javax.inject.Singleton;
+
+import org.jongo.*;
+import org.jongo.marshall.jackson.JacksonMapper;
+
+import com.fasterxml.jackson.datatype.jdk8.Jdk8Module;
+import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
+import com.fasterxml.jackson.module.paramnames.ParameterNamesModule;
+import com.mongodb.*;
+
+import play.inject.ApplicationLifecycle;
+
+@Singleton
+public class MongoImp implements JongoDatabase {
+	
+	final DB db;
+	final Jongo jongo;
+	final MongoClient mongo;
+	final Mapper mapper;
+	final int id;
+	
+	@Inject public MongoImp(ApplicationLifecycle lifecycle){ // XXX Singleton
+		Random r  = new java.util.Random();
+		mongo = new MongoClient("localhost", 27017);
+		id = r.nextInt();
+		db = mongo.getDB("panel");
+		mapper = new JacksonMapper.Builder()
+				.registerModule( new Jdk8Module())
+				.registerModule(new JavaTimeModule())
+				.registerModule( new ParameterNamesModule())
+				.build();
+		jongo = new Jongo(db, mapper);
+		System.out.println("Created Mongo Instance #"+id);
+		lifecycle.addStopHook(() -> {
+            close();
+            return CompletableFuture.completedFuture(null);
+        });
+	}
+	
+	public MongoCollection getCollection(String name){
+		return this.jongo.getCollection(name);
+	}
+	
+	public DB getDatabase(){
+		return this.jongo.getDatabase();
+	}
+	
+	public void close(){
+		this.mongo.close();
+	}
+	
+
+}

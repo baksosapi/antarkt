@@ -1,0 +1,12 @@
+package servicios.dao;
+
+import models.entidades.*;
+
+public class DAOAgentes extends DAO<Agente> {
+	
+	public DAOAgentes(JongoDatabase jd){
+		super(jd, "agentes", Agente.class);
+		//Agente u = AgenteFactory.builder().setNombre("Mark").setId("Twain").build();
+		//.builder().setNombre("mark").setId("ER%NHSHYS&S").setPlan(new Plan()).build();
+	}
+}

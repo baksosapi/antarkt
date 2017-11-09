@@ -1,0 +1,11 @@
+package servicios;
+
+import models.Entidades.Usuario;
+public class DAOUsuarios {
+	
+	public static Promise<Usuario> findById(String id){
+		return Future.class;
+		
+	}
+
+}

@@ -1,0 +1,11 @@
+package models.entidades
+import java.time.LocalDate;
+
+
+trait Entidad {
+  val nombre:String;
+  val id:String;
+  val creacion:LocalDate;
+}
+
+case class Usuario(val plan:Plan) with Entidad 

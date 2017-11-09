@@ -1,0 +1,18 @@
+package servicios;
+/*
+
+MongoCursor<Friend> all = friends.find("{name: 'Joe'}").as(Friend.class);
+Friend one = friends.findOne("{name: 'Joe'}").as(Friend.class);*/
+
+
+public class Mongo {
+	
+	final Morphia morphia = new Morphia();
+	
+	
+	public Mongo(){
+		morphia.mapPackage("org.mongodb.morphia.example");
+	}
+	
+
+}

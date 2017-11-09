@@ -1,0 +1,13 @@
+package servicios;
+
+import models.Entidades.Usuario;
+import scala.concurrent.Future;
+
+public class DAOUsuarios {
+	
+	public static Future<Usuario> findById(String id){
+		return Future.class;
+		
+	}
+
+}

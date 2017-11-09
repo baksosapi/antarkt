@@ -1,0 +1,54 @@
+package servicios.rabbit;
+import com.rabbitmq.client.Channel;
+
+import akka.actor.Props;
+import akka.actor.UntypedActor;
+import akka.actor.ActorRef;
+
+public class RabbitChannel extends UntypedActor {
+	
+	private final Channel channel;
+	private final String queueName;
+	
+	public RabbitChannel(Channel channel, String queName){
+		this.channel = channel;
+		this.queueName = queueName;
+	}
+	
+	ActorRef worker = getContext().actorOf(Props.create(RabbitWorker.class, "worker")); //Considerar router con RoundRobin
+	
+	@Override
+	public void onReceive(Object msg) throws Exception {
+		if(msg instanceof RabbitProtocol.Ack){
+			RabbitProtocol.Ack ack = (RabbitProtocol.Ack) msg;
+			ack(ack, channel);
+		} else {
+			unhandled(msg);
+		}
+	}
+	
+	private void init() throws Exception { // TODO: Informar error
+		channel.queueDeclarePassive( queueName );
+	}
+	
+	private void ack(RabbitProtocol.Ack ack, Channel channel) throws Exception {
+		try {
+			if(channel != null){
+				System.out.println("CHANNEL WAS NOT NULL");
+				channel.basicAck(ack.tag, false);
+				System.out.println("CHANNEL WAS NOT NULL");
+			} else {
+				System.out.println("CHANNEL WAS NULL");
+			} if(ack != null){
+				System.out.println("tag" + ack.tag + " < tag");
+			} else {
+				System.out.println("TAG WAS NULL");
+			}
+		} catch (Exception e){
+			throw new RabbitProtocol.AckException();
+		}
+		
+		
+	}
+
+}

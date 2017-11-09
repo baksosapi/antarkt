@@ -1,0 +1,13 @@
+package servicios.dao;
+
+import org.jongo.MongoCollection;
+
+import com.google.inject.ImplementedBy;
+import com.mongodb.DB;
+
+@ImplementedBy(MongoImp.class)
+public interface JongoDatabase {
+	public MongoCollection getCollection(String name);
+	public DB getDatabase();
+	public void close();
+}

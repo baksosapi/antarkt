@@ -1,0 +1,12 @@
+package servicios.dao;
+
+import org.jongo.MongoCollection;
+
+import com.mongodb.DB;
+
+
+public interface JongoDatabase {
+	public MongoCollection getCollection(String name);
+	public DB getDatabase();
+	public void close();
+}

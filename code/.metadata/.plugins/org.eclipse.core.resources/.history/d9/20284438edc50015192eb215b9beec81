@@ -1,0 +1,35 @@
+package models.entidades;
+
+import org.bson.types.ObjectId;
+
+import eu.dozd.mongo.annotation.Entity;
+import eu.dozd.mongo.annotation.Id;
+
+@Entity
+public class Usuario {
+	
+	@Id
+	public ObjectId id;
+	public String nombre;
+	public Plan plan;
+	
+	public ObjectId getId() {
+		return id;
+	}
+	public void setId(String id) {
+		this.id = id;
+	}
+	public String getNombre() {
+		return nombre;
+	}
+	public void setNombre(String nombre) {
+		this.nombre = nombre;
+	}
+	public Plan getPlan() {
+		return plan;
+	}
+	public void setPlan(Plan plan) {
+		this.plan = plan;
+	}
+	
+}

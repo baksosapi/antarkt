@@ -1,0 +1,11 @@
+DB db = new MongoClient().getDB("dbname");
+
+Jongo jongo = new Jongo(db);
+MongoCollection friends = jongo.getCollection("friends");
+
+MongoCursor<Friend> all = friends.find("{name: 'Joe'}").as(Friend.class);
+Friend one = friends.findOne("{name: 'Joe'}").as(Friend.class);
+
+public class Mongo {
+
+}

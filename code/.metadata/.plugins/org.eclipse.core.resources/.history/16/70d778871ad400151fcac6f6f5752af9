@@ -1,0 +1,39 @@
+package models.entidades;
+
+import org.immutables.value.Value;
+import org.jongo.marshall.jackson.oid.MongoObjectId;
+
+@Value.Immutable
+abstract class Maquina {
+	
+	abstract String getId();
+	abstract String getNombre();
+	abstract String getIp();
+	
+/*	@MongoObjectId
+	private String id;
+	private String nombre;
+	private String ip;
+	private java.util.List<Aplicacion> aplicaciones;
+	
+	public String getNombre() {
+		return nombre;
+	}
+	public void setNombre(String nombre) {
+		this.nombre = nombre;
+	}
+	private String getIp() {
+		return ip;
+	}
+	public void setIp(String ip) {
+		this.ip = ip;
+	}
+	public java.util.List<Aplicacion> getAplicaciones() {
+		return aplicaciones;
+	}
+	public void setAplicaciones(java.util.List<Aplicacion> aplicaciones) {
+		this.aplicaciones = aplicaciones;
+	}*/
+	
+
+}

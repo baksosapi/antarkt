@@ -1,0 +1,8 @@
+package models.entidades;
+
+public class Entorno {
+	private String nombre;
+	private java.util.List<Servicio> servicios;
+	//cocinado
+
+}

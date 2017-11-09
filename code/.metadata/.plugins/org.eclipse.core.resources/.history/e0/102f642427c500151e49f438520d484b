@@ -1,0 +1,14 @@
+package servicios;
+
+import org.bson.types.ObjectId;
+
+import play.libs.F.Promise;
+
+public interface DAO<T> {
+	
+	public abstract Promise<T> findById(ObjectId id);
+	public abstract Promise<T> findByName(String name);
+	public abstract Promise<T> saveSingle(T object);
+	
+
+}

@@ -1,0 +1,32 @@
+package controllers;
+
+import java.util.concurrent.CompletableFuture;
+
+import models.entidades.Entidad;
+import play.libs.Json;
+import play.mvc.Controller;
+import play.mvc.Result;
+import play.mvc.Results;
+import servicios.dao.DAO;
+
+abstract class APILectura<T implements Entidad> extends Controller {
+	
+	public DAO<T> dao;
+	
+	public APILectura(DAO<T> d){
+		this.dao = d;
+	}
+	
+	public CompletableFuture<Result> findById(String id){
+		CompletableFuture<T> result = dao.findById(id);
+		System.out.println("waiting for DAO...");
+		return result.thenApply( (T r) -> Results.ok( Json.toJson(r) ) );
+	}
+	
+	public CompletableFuture<Result> findByName(String name){
+		CompletableFuture<T> aa = dao.findByName(name);
+		System.out.println("waiting for DAO...");
+		return aa.thenApply( (T r) -> Results.ok( Json.toJson(r) ) );
+	}
+	
+}

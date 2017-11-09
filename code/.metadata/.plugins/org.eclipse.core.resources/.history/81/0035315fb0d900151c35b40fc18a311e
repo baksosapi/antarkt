@@ -1,0 +1,9 @@
+package servicios.dao;
+
+import models.entidades.BeanInterface;
+
+public class DAOBean extends DAO<BeanInterface> {
+	public DAOBean(JongoDatabase jd, String string, Class<BeanInterface> class1) {
+		super(js, string, class1);
+	}
+}

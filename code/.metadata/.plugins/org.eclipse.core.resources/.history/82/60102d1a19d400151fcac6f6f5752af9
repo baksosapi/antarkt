@@ -1,0 +1,27 @@
+package models.entidades;
+
+import java.time.LocalDate;
+
+public class Usuario implements Entidad {
+	
+	public Plan getPlan(){ return null; }
+
+	@Override
+	public String getId() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public LocalDate getCreadoEn() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public String getNombre() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+	
+}

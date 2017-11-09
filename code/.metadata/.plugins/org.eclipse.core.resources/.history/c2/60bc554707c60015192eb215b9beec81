@@ -1,0 +1,61 @@
+package servicios;
+
+import play.libs.F;
+import play.libs.F.Promise;
+
+import javax.inject.Inject;
+import javax.inject.Singleton;
+
+import org.bson.types.ObjectId;
+
+import com.typesafe.config.Config;
+import com.typesafe.config.ConfigFactory;
+import org.jongo.MongoCollection;
+
+import models.entidades.Usuario;
+
+@Singleton
+public class DAOUsuarios implements DAO<Usuario> {
+	
+	Config config = ConfigFactory.load();
+	@Inject Mongo mongo;
+	MongoCollection usuarios;
+	
+	public DAOUsuarios() {
+		this.usuarios = mongo.getCollection("usuarios");
+	}
+
+	@Override
+	public F.Promise<Usuario> findById(String id) {
+		Usuario u = usuarios.findOne(new ObjectId(id)).as(Usuario.class);
+		if(u != null){
+			return Promise.pure(u);
+		} else {
+			return Promise.throwing(new Throwable("Not such id"));
+		}
+	}
+
+	@Override
+	public F.Promise<Usuario> findByName(String name) {
+		Usuario u = usuarios.findOne("{name: #}", name).as(Usuario.class);
+		if(u != null){
+			return Promise.pure(u);
+		} else {
+			return Promise.throwing(new Throwable("Not such id"));
+		}
+	}
+	
+	public F.Promise<Usuario> insert(String name) {
+		Usuario u = new Usuario();
+		u.setNombre(name);
+		usuarios.save(u);
+		return Promise.pure(u);
+	}
+
+	/*@Override
+	public Promise<Usuario> saveSingle(Usuario object) {
+		// TODO Auto-generated method stub
+		return null;
+	}*/
+
+}

@@ -1,0 +1,26 @@
+package controllers;
+
+import play.mvc.*;
+import akka.actor.*;
+import javax.inject.*;
+
+@Singleton
+public class APIAgente extends Controller{
+	
+	private ActorRef prisma;
+	private ActorRef mongo;
+
+	@Inject public APIAgente(ActorSystem system){
+		prisma = system.actorOf(Props.create(servicios.Prisma.class), "prisma");
+		mongo = system.actorOf(Props.create(servicios.Mongo.class), "mongo");
+	}
+	
+	public Future<Result> listar(String filter, short limit, short pagina){
+		prisma.tell("listar", ActorRef.noSender() );
+		request().uri();
+		return Results.TODO;
+	}
+	
+	
+	
+}

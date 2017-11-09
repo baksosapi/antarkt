@@ -1,0 +1,7 @@
+package models.entidades;
+
+public class Maquina {
+	public String ip;
+	public java.util.List<Aplicacion> aplicaciones;
+
+}

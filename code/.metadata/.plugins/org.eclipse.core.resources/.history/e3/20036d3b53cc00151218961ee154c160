@@ -1,0 +1,59 @@
+package servicios;
+
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.security.KeyStore;
+
+import javax.net.ssl.SSLContext;
+import javax.net.ssl.TrustManagerFactory;
+
+import com.rabbitmq.client.*;
+
+import play.libs.Json;
+
+// Recordar que Parra tiene que programar en Java tmb: DOCUMENTARS
+public class Rabbit {
+	
+	public static String QUEUE_NAME = "panel";
+	
+	public void connect() throws Exception {
+	    ConnectionFactory factory = new ConnectionFactory();
+        char[] keyPassPhrase = "secret".toCharArray();
+        
+        KeyStore tks = KeyStore.getInstance("JKS");
+        tks.load(new FileInputStream("/home/mancvso/Antarkt/Certificates/rabbitmq/keycert.p12"), keyPassPhrase);            
+        TrustManagerFactory tmf = TrustManagerFactory.getInstance("SunX509");
+        tmf.init(tks);
+        SSLContext c = SSLContext.getInstance("TLS");
+        c.init(null, tmf.getTrustManagers(), null);
+
+	    //factory.setHost("");
+	    factory.setUri("amqps://santos:rhino.metal.acid.cover@186.64.123.120:5671");
+	    //factory.setPort();
+	    factory.useSslProtocol(c);
+	    Connection connection = factory.newConnection();
+	    Channel channel = connection.createChannel();
+
+	    // XXX: Si es pasiva, se asume que existe y se usa la configuración del servidor, de no existir, una exepción se lanza.
+	    // TODO: Es necesario garantizar que exista la cola antes de este punto
+	    channel.queueDeclarePassive(QUEUE_NAME);
+	    System.out.println(" [*] Procesando mensajes...");
+
+	    Consumer consumer = new DefaultConsumer(channel) {
+	      @Override
+	      public void handleDelivery(String consumerTag, Envelope envelope, AMQP.BasicProperties properties, byte[] body)
+	          throws IOException {
+	        String message = new String(body, "UTF-8");
+	        System.out.println(" [x] Received '" + message + "'" + "from key " + envelope.getRoutingKey() + " as JSON \n" + Json.parse(message) + "\n");
+	        
+	        //routingkey -> Clase
+	        // actor ! msg
+	        
+	      }
+	    };
+	    channel.basicConsume(QUEUE_NAME, true, consumer);
+	  }
+    
+    
+
+}

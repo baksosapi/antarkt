@@ -1,0 +1,22 @@
+package servicios.agente;
+
+import java.time.LocalDateTime;
+
+import akka.actor.UntypedActor;
+// Coordinador disponible en: getContext().parent()
+public class Agente extends UntypedActor {
+	
+	private boolean wasContacted;
+	private LocalDateTime lastContact;
+	
+	public void onReceive(Object msg){
+		if (msg instanceof ProtocoloAgente.Pong) {
+			wasContacted = true;
+			lastContact = LocalDateTime.now();
+		} else if(msg instanceof ProtocoloAgente.Status) {
+			getSender().tell(new StatusReport(wasContacted, lastContact), arg1);
+		}
+		
+	}
+
+}

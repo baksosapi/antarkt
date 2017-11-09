@@ -1,0 +1,14 @@
+package models.mensajes;
+
+import org.immutables.value.Value;
+
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+
+@Value.Immutable(copy = false)
+// TODO Automatizar esta parte, no me gustan las anotaciones
+/*@JsonDeserialize(as=StringMessage.class) //Magia negra
+@JsonSerialize(as=StringMessage.class) //Magia negra*/
+public interface StringMessage implements AgentResponse {
+	public abstract String body();
+}

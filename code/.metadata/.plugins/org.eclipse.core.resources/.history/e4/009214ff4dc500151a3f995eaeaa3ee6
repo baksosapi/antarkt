@@ -1,0 +1,31 @@
+package models.entidades;
+
+import org.bson.types.ObjectId;
+import javax.persistence.Id;
+
+public class Usuario {
+	public Plan plan;
+	@Id
+	public String id;
+	public String nombre;
+	
+	public String getNombre() {
+		if(this.nombre == null){
+			return "(not set)";
+		} else {
+			return nombre;
+		}
+	}
+	
+	public void setNombre(String nombre) {
+		this.nombre = nombre;
+	}
+
+	public String getId() {
+		if(this.id == null){
+			return "(none)";
+		} else {
+			return this._id.toHexString();
+		}
+	}
+}

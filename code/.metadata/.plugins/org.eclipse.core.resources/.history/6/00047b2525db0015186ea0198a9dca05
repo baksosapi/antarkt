@@ -1,0 +1,18 @@
+package servicios;
+
+// Scala value class
+public class RoutingKey {
+	
+	static RoutingKey fromString(String str){
+		
+	}
+	
+	public UUID getUUID(){
+		return uuid;
+	}
+	
+	public String getOrganization(){
+		return organization;
+	}
+
+}

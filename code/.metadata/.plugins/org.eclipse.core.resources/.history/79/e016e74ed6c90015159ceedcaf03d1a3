@@ -1,0 +1,9 @@
+package controllers;
+
+import org.jongo.marshall.jackson.oid.MongoObjectId;
+
+public interface Entidad {
+	@MongoObjectId
+	public String id;
+	public String nombre;
+}

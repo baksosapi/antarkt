@@ -1,0 +1,11 @@
+package models.mensajes;
+
+import org.immutables.value.Value;
+
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+
+@Message
+public interface Msg {
+	public String value();
+}

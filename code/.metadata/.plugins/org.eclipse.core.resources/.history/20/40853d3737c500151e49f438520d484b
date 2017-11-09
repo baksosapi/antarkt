@@ -1,0 +1,48 @@
+package servicios;
+
+import play.libs.F.Promise;
+
+import javax.inject.Singleton;
+
+import org.bson.types.ObjectId;
+import org.jongo.Jongo;
+import org.jongo.MongoCollection;
+
+import com.mongodb.DB;
+import com.mongodb.MongoClient;
+import com.mongodb.WriteResult;
+
+import models.entidades.Usuario;
+
+@Singleton
+public class DAOUsuarios implements DAO<Usuario> {
+	
+	@SuppressWarnings("deprecation")
+	private DB db = new MongoClient("0.0.0.0", 32768).getDB("panel");
+	
+	private Jongo jongo = new Jongo(db);
+	public MongoCollection usuarios = jongo.getCollection("usuarios");
+
+	public Promise<Usuario> crear(String nombre) {
+		Usuario u = new Usuario();
+		u.setNombre(nombre);
+		return Promise.promise( () -> usuarios.insert(u)).map( (wr) ->  u );
+	}
+
+	@Override
+	public Promise<Usuario> findById(ObjectId id) {
+		return Promise.promise(() -> usuarios.findOne(id).as(Usuario.class) );
+	}
+
+	@Override
+	public Promise<Usuario> findByName(String name) {
+		return Promise.promise(() -> usuarios.findOne("{name: #", name).as(Usuario.class) );
+	}
+
+	@Override
+	public Promise<Usuario> saveSingle(Usuario object) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+}

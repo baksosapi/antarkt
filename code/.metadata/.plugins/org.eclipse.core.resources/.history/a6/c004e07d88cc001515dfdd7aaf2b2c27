@@ -1,0 +1,47 @@
+package servicios;
+import org.bson.types.ObjectId;
+
+import akka.actor.*;
+import play.libs.F.Promise;
+
+public class SupervisorAgente extends UntypedActor {
+	
+	public class Crear {
+		public final ObjectId remoteId;
+		
+		public Crear(ObjectId assignedAgentId){ this.remoteId = assignedAgentId; }
+	}
+	
+	public class PedirEstado {
+		public final ObjectId remoteId;
+		
+		public PedirEstado(ObjectId assignedAgentId){ this.remoteId = assignedAgentId; }
+	}
+	
+	private final java.util.Optional<String> receivedToken;
+	
+	public void onReceive(Object msg){
+		if(msg instanceof SupervisorAgente.Crear){
+			SupervisorAgente.Crear crear = (SupervisorAgente.Crear) msg;
+			registerAgent(crear);
+			sendAgent(crear);
+		} else if(msg instanceof SupervisorAgente.PedirEstado){
+			SupervisorAgente.PedirEstado verificar = (SupervisorAgente.PedirEstado) msg;
+			pingAgent(verificar);
+		}
+		
+	}
+	
+	public Promise<String> registerAgent(SupervisorAgente.Crear crear){
+		return Promise.pure("TODO");
+	}
+	
+	public Promise<String> sendAgent(SupervisorAgente.Crear crear){
+		return Promise.pure("TODO");
+	}
+	
+	public Promise<String> pingAgent(SupervisorAgente.PedirEstado crear){
+		return Promise.pure("TODO");
+	}
+
+}

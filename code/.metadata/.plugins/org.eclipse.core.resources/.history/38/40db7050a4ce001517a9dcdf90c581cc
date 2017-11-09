@@ -1,0 +1,14 @@
+package servicios;
+
+public class RabbitProtocol {
+	
+	public inner class Connect(){
+		private final 
+		
+		public Connect(){
+			
+		}
+		
+	}
+
+}

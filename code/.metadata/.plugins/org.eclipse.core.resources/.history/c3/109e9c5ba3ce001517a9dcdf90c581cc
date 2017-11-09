@@ -1,0 +1,53 @@
+package servicios;
+
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.security.KeyStore;
+import java.util.List;
+
+import javax.net.ssl.SSLContext;
+import javax.net.ssl.TrustManagerFactory;
+
+import com.rabbitmq.client.*;
+import com.rabbitmq.client.Address;
+
+import play.libs.Json;
+import akka.actor.*;
+import com.typesafe.config.*;
+
+// Fuente de mensajes de todo el sistema
+// TODO: Aislar estados (become): Conectado / No conectado
+public class RabbitManager extends UntypedActor {
+	
+	private final String QUEUE_NAME = "panel";
+	private final String UTF8 = "UTF-8";
+
+	// export
+	
+	@Override
+	public void postStop() throws Exception {
+		// TODO Auto-generated method stub
+		channel.close();
+		connection.close();
+	}
+
+	@Override
+	public void preStart() throws Exception {
+		connect();
+	}
+
+	@Override
+	public void onReceive(Object arg0) throws Exception {
+		// TODO Auto-generated method stub
+		
+	}
+	
+	public void generateConfiguration(){
+		
+	}
+
+	
+    
+    
+
+}

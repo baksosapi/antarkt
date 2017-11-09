@@ -1,0 +1,13 @@
+package models.mensajes;
+
+import org.immutables.value.Value;
+
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+
+@Value.Immutable
+@JsonSerialize(as = AbstractMsg.class)
+@JsonDeserialize(as = AbstractMsg.class)
+public interface AbstractMsg {
+	public String value();
+}

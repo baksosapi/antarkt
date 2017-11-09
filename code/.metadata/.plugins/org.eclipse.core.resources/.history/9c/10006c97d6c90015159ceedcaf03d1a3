@@ -1,0 +1,15 @@
+package controllers;
+
+import org.jongo.marshall.jackson.oid.MongoObjectId;
+
+abstract class Entidad {
+	@MongoObjectId
+	final String id;
+	public String getId() {
+		return id;
+	}
+	public String getNombre() {
+		return nombre;
+	}
+	final String nombre;
+}

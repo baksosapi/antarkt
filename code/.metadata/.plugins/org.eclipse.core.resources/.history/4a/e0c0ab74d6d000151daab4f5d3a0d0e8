@@ -1,0 +1,6 @@
+package models.mensajes;
+
+@Message
+public interface Msg {
+	public String value();
+}

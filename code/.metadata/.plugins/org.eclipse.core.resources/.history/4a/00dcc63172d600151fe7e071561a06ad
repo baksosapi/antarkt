@@ -1,0 +1,53 @@
+package controllers;
+
+import play.mvc.WebSocket;
+import servicios.dao.DAO;
+import servicios.dao.DAOBean;
+import servicios.rabbit.*;
+import akka.actor.*;
+import models.entidades.BeanInterface;
+import models.entidades.ImmutableBeanInterface;
+
+import java.util.concurrent.CompletableFuture;
+import play.mvc.WebSocket;
+
+import javax.inject.*;
+import views.html.*;
+
+@Singleton
+public class Application extends Controller {
+	final ActorRef manager;
+	final DAO<BeanInterface> some = new DAOBean("beans", BeanInterface.class);
+	
+	@Inject public Application(ActorSystem system){
+		manager = system.actorOf(Props.create(RabbitManager.class), "rabbit"); // TODO: Externalizar a un modulo
+		
+		try {
+			System.out.println("Connecting to Rabbit");
+			//ImmutableBeanInterface bi = ImmutableBeanInterface.builder().descripcion("present description").build();
+			//some.insert(bi).thenApply( (fbi) -> fbi.getDescripcion() );
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
+
+    public Result index() {
+    	greeter.tell(new servicios.agente.ProtocoloAgente.Hola("does it works?"), ActorRef.noSender());
+        return Results.ok(index.render("Your new application is ready."));
+    }
+    
+    public WebSocket<String> socket() {
+        if (session().get("user") != null) {
+            return WebSocket.withActor(MyWebSocketActor::props);
+        } else {
+            return WebSocket.reject(forbidden());
+        }
+    }
+    
+    public Result anunciar(String id){
+    	greeter.tell( new servicios.agente.ProtocoloAgente.Anunciar(id), ActorRef.noSender() );
+    	return Results.found("hi mom"); 
+    }
+
+}

@@ -1,0 +1,21 @@
+package servicios.dao;
+
+import java.util.UUID;
+import java.util.concurrent.CompletableFuture;
+
+import models.entidades.*;
+
+public class DAOAgentes extends DAO<Agente> {
+	
+	public DAOAgentes(JongoDatabase jd){
+		super(jd, "agentes", Agente.class);
+		//Agente u = AgenteFactory.builder().setNombre("Mark").setId("Twain").build();
+		//.builder().setNombre("mark").setId("ER%NHSHYS&S").setPlan(new Plan()).build();
+	}
+	
+	public CompletableFuture<Agente> porToken(String token){
+		UUID uuid = UUID.fromString(token)
+		return this.findBySingleField("token", uuid );
+		
+	}
+}

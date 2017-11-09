@@ -1,0 +1,28 @@
+package servicios;
+import org.bson.types.ObjectId;
+
+import akka.actor.*;
+
+public class SupervisorAgente extends UntypedActor {
+	
+	public class Crear {
+		public final ObjectId remoteId;
+		
+		public Crear(ObjectId remoteAgentId){ this.remoteId = remoteAgentId; }
+	}
+	
+	public void onReceive(Object msg){
+		if(msg instanceof SupervisorAgente.Crear){
+			SupervisorAgente.Crear crear = (SupervisorAgente.Crear) msg;
+			registerAgent(crear);
+		} else if(msg == null){
+			
+		}
+		
+	}
+	
+	public void registerAgent(SupervisorAgente.Crear crear){
+		
+	}
+
+}

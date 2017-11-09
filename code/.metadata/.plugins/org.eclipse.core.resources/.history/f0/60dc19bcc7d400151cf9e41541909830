@@ -1,0 +1,12 @@
+package models.entidades;
+
+import org.immutables.value.Value;
+//import org.jongo.marshall.jackson.oid.MongoObjectId;
+
+@Value.Immutable
+@GenerarClase
+public interface Maquina extends Entidad {
+	public String getNombre();
+	public String getIp();
+	public java.util.List<Aplicacion> getAplicaciones();
+}

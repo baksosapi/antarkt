@@ -1,0 +1,46 @@
+package controllers;
+
+import play.libs.F.Promise;
+import play.libs.Json;
+import play.mvc.*;
+import servicios.DAOUsuarios;
+import akka.actor.*;
+import models.entidades.Usuario;
+
+import com.fasterxml.jackson.databind.JsonNode;
+
+import javax.inject.*;
+
+@Singleton
+public class APIAgente extends Controller {
+	
+	@Inject private DAOUsuarios usuarios; 
+	
+	/*public APIAgente(ActorSystem system, DAOUsuarios usuarios){
+		//prisma = system.actorOf(Props.create(servicios.Prisma.class), "prisma");
+		//mongo = system.actorOf(Props.create(servicios.Mongo.class), "mongo");
+	}*/
+	
+	public Promise<Result> findById(String id){
+		Promise<Usuario> aa = usuarios.findById(id);
+		return aa.map( (Usuario u) -> Results.ok(u.getNombre() ) );
+	}
+	
+	@BodyParser.Of(BodyParser.Json.class)
+	public Promise<Result> crear(){
+		Promise<Usuario> nuevo;
+		JsonNode json = request().body().asJson();
+	    String nombre = json.findPath("nombre").textValue();
+		if(nombre == null) {
+		    return Promise.promise( () -> Results.badRequest("Missing parameter [name]") );
+		} else {
+			nuevo = usuarios.crear(nombre);
+			System.out.println(nombre);
+			return nuevo.map(Json::toJson).map((j) -> Results.created(j) );
+		}
+		  
+	}
+	
+	
+	
+}

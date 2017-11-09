@@ -1,0 +1,53 @@
+package servicios;
+
+import java.util.Optional;
+import java.util.UUID;
+
+// Scala value class
+
+/*
+ * Routing keys
+ * <organization>.<component>.<entity>.[ # | UUID ]
+ */
+public class RoutingKey {
+	public final Optional<UUID> uuid;
+	public final String organizacion;
+	public final String componente;
+	public final String entidad;
+	public final boolean isBroadcast;
+	
+	private RoutingKey(String org, String comp, String ent){
+		this.organizacion = org;
+		this.componente = comp;
+		this.entidad = ent;
+		this.isBroadcast = true;
+		this.uuid = Optional.empty();
+	}
+	
+	private RoutingKey(String org, String comp, String ent, UUID dest){
+		this.organizacion = org;
+		this.componente = comp;
+		this.entidad = ent;
+		this.uuid = Optional.of( dest );
+		this.isBroadcast = false;
+	}
+	
+	static Optional<RoutingKey> fromString(String str){
+		String[] raw = str.split(".");
+		if(raw.length == 4){
+			// Broadcast
+			if(raw[3] == "#"){
+				return Optional.of( new RoutingKey(raw[0], raw[1], raw[2]) );
+			// UUID
+			} else if(raw[3].matches("[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[34][0-9a-fA-F]{3}-[89ab][0-9a-fA-F]{3}-[0-9a-fA-F]{12}")){
+				return new RoutingKey(raw[0], raw[1], raw[2], UUID.fromString(raw[3]));
+			} else {
+				return 
+			}
+			
+		} else if(raw.length == 5){
+			
+		}
+	}
+
+}

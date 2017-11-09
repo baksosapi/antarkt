@@ -1,0 +1,97 @@
+package servicios;
+
+import java.util.*;
+
+import play.libs.F;
+
+import javax.inject.Inject;
+import javax.inject.Singleton;
+
+import org.bson.Document;
+import org.bson.codecs.configuration.*;
+import org.bson.conversions.Bson;
+import org.bson.types.ObjectId;
+
+import com.typesafe.config.Config;
+import com.typesafe.config.ConfigFactory;
+
+import eu.dozd.mongo.MongoMapper;
+
+import models.entidades.Usuario;
+
+@Singleton
+public class DAOUsuarios implements DAO<Usuario> {
+	
+	Config config = ConfigFactory.load();
+	@Inject Mongo mongo;
+			
+	//public MongoCollection usuariosMongo = db.getCollection("usuarios");
+	//public JacksonDBCollection<Usuario, String> usuarios = JacksonDBCollection.wrap(usuariosMongo, Usuario.class, String.class);
+	
+
+	/*public Promise<Usuario> crear(String nombre) {
+		Usuario u = new Usuario();
+		u.setNombre(nombre);
+		return Promise.promise( () -> usuarios.insert(u)).map( (wr) ->  u );
+	}*/
+
+	@Override
+	public F.Promise<Usuario> findById(String id) {
+		F.RedeemablePromise<Usuario> promise = F.RedeemablePromise.empty();
+		System.out.println("querying...");
+		usuarios.
+		usuarios.find( eq("_id", id) ).first( (u, e) -> { // FIXME: Single field query
+			System.out.println("dispatching callback...");
+			if(u == null || e != null){
+				promise.failure( new Throwable("no user"));
+			} else {
+				promise.success(u);
+			}
+			
+		}); //first( (user, t) -> Promise.pure(user) ); // map( (user, t) -> user ); //first( (res, t) -> res );
+		System.out.println("derefing completion");
+		return promise;
+
+	}
+
+	@Override
+	public F.Promise<Usuario> findByName(String name) {
+		F.RedeemablePromise<Usuario> promise = F.RedeemablePromise.empty();
+		System.out.println("querying...");
+		usuarios.find( eq("nombre", name) ).first( (u, e) -> { // FIXME: Single field query
+			System.out.println("dispatching callback...");
+			if(u == null || e != null){
+				promise.failure( new Throwable("no user"));
+			} else {
+				promise.success(u);
+			}
+			
+			/*if(u != null){
+				promise.success(u);
+			} else {
+				promise.failure(e);
+			}*/
+		}); //first( (user, t) -> Promise.pure(user) ); // map( (user, t) -> user ); //first( (res, t) -> res );
+		System.out.println("derefing completion");
+		return promise;
+	}
+	
+	public F.Promise<Usuario> insert(String name) {
+		F.RedeemablePromise<Usuario> promise = F.RedeemablePromise.empty();
+		System.out.println("inserting...");
+		Usuario usuario= new Usuario();
+		usuario.setNombre(name);
+
+		    // Store person normally.
+		usuarios.insertOne(usuario, (v, t) -> promise.success(usuario));
+		System.out.println("derefing completion");
+		return promise;
+	}
+
+	/*@Override
+	public Promise<Usuario> saveSingle(Usuario object) {
+		// TODO Auto-generated method stub
+		return null;
+	}*/
+
+}

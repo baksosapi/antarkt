@@ -1,0 +1,25 @@
+package servicios;
+/*
+
+MongoCursor<Friend> all = friends.find("{name: 'Joe'}").as(Friend.class);
+Friend one = friends.findOne("{name: 'Joe'}").as(Friend.class);*/
+
+import org.mongodb.morphia.Datastore;
+import org.mongodb.morphia.Morphia;
+import com.mongodb.*;
+
+public class Mongo {
+	
+	final Morphia morphia;
+	final Datastore datastore;
+	
+	
+	public Mongo(){
+		morphia = new Morphia();
+		morphia.mapPackage("models.entidades");
+		datastore = morphia.createDatastore(new MongoClient("localhost", 32768), "panel");
+		datastore.ensureIndexes();
+	}
+	
+
+}

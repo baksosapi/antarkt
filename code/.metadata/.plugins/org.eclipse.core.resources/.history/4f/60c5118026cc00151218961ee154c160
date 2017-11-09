@@ -1,0 +1,51 @@
+package servicios;
+
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.security.KeyStore;
+import java.security.KeyStore.LoadStoreParameter;
+
+import javax.net.ssl.SSLContext;
+import javax.net.ssl.TrustManagerFactory;
+
+import com.rabbitmq.client.*;
+
+import play.libs.Json;
+
+public class Rabbit {
+	
+	public static String QUEUE_NAME = "panel";
+	
+	public void connect() throws Exception {
+	    ConnectionFactory factory = new ConnectionFactory();
+        char[] keyPassPhrase = "secret".toCharArray();
+        KeyStore tks = KeyStore.getInstance("JKS");
+        tks.load(new FileInputStream("./rabbitstore"), keyPassPhrase);            
+        TrustManagerFactory tmf = TrustManagerFactory.getInstance("SunX509");
+        tmf.init(tks);
+        SSLContext c = SSLContext.getInstance("TLS");
+        c.init(null, tmf.getTrustManagers(), null);
+
+	    factory.setHost("186.64.123.120");
+	    factory.setPort(5671);
+	    factory.useSslProtocol();
+	    Connection connection = factory.newConnection();
+	    Channel channel = connection.createChannel();
+
+	    channel.queueDeclare(QUEUE_NAME, false, false, false, null);
+	    System.out.println(" [*] Waiting for messages. To exit press CTRL+C");
+
+	    Consumer consumer = new DefaultConsumer(channel) {
+	      @Override
+	      public void handleDelivery(String consumerTag, Envelope envelope, AMQP.BasicProperties properties, byte[] body)
+	          throws IOException {
+	        String message = new String(body, "UTF-8");
+	        System.out.println(" [x] Received '" + message + "'" + "from key " + envelope.getRoutingKey() + " as JSON " + Json.parse(message) );
+	      }
+	    };
+	    channel.basicConsume(QUEUE_NAME, true, consumer);
+	  }
+    
+    
+
+}

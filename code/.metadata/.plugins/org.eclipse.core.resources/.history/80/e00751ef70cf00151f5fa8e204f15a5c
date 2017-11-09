@@ -1,0 +1,75 @@
+package servicios.rabbit;
+import java.io.IOException;
+
+import com.rabbitmq.client.AMQP;
+import com.rabbitmq.client.Channel;
+import com.rabbitmq.client.Consumer;
+import com.rabbitmq.client.DefaultConsumer;
+import com.rabbitmq.client.Envelope;
+
+import akka.actor.Props;
+import akka.actor.UntypedActor;
+import akka.actor.ActorRef;
+
+public class RabbitChannel extends UntypedActor {
+	
+	private final Channel channel;
+	private final String queueName;
+	
+	public RabbitChannel(Channel channel, String queueName){
+		this.channel = channel;
+		this.queueName = queueName;
+	}
+	
+	ActorRef worker = getContext().actorOf(Props.create(RabbitWorker.class), "worker"); //Considerar router con RoundRobin
+	
+	@Override
+	public void onReceive(Object msg) throws Exception {
+		if(msg instanceof RabbitProtocol.Ack){
+			RabbitProtocol.Ack ack = (RabbitProtocol.Ack) msg;
+			ack(ack);
+		} else {
+			unhandled(msg);
+		}
+	}
+	
+	@Override
+	public void preStart() throws Exception {
+		init();
+		
+	}
+	
+	private void init() throws Exception { // TODO: Informar error
+		channel.queueDeclarePassive( queueName );
+		Consumer consumer = new DefaultConsumer(channel) { // Nueva hebra
+		      @Override
+		      public void handleDelivery(String consumerTag, Envelope envelope, AMQP.BasicProperties properties, byte[] body)
+		          throws IOException {
+		        
+		        worker.tell( new RabbitProtocol.RawMessage(envelope.getDeliveryTag(), envelope.getRoutingKey(), consumerTag, body), getSelf() ); // Rawer (?)
+		      
+		      }
+	    };
+	    channel.basicConsume(queueName, false, consumer); // XXX Garantizar existencia de la cola
+	}
+	
+	private void ack(RabbitProtocol.Ack ack) throws Exception {
+		try {
+			if(channel != null){
+				System.out.println("CHANNEL WAS NOT NULL");
+				channel.basicAck(ack.tag, false);
+			} else {
+				System.out.println("CHANNEL WAS NULL");
+			} if(ack != null){
+				System.out.println("tag" + ack.tag + " < tag");
+			} else {
+				System.out.println("TAG WAS NULL");
+			}
+		} catch (Exception e){
+			throw new RabbitProtocol.AckException();
+		}
+		
+		
+	}
+
+}

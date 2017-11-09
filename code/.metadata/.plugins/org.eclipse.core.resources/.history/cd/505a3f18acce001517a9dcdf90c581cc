@@ -1,0 +1,25 @@
+package servicios;
+
+import akka.actor.UntypedActor;
+
+// Manager 1->1 Connection 1->* Workers
+// Config -> Connection -> Message
+// Fuente de mensajes de todo el sistema
+// TODO: Aislar estados (become): Conectado / No conectado
+public class RabbitManager extends UntypedActor {
+	
+	ActorRef rabbitWorker;// = getContext(). actorOf(RabbitWorker.class, "worker");
+	 
+	private final String QUEUE_NAME = "panel";
+
+	public void onReceive(Object msg) throws Exception{
+		unhandled(msg);
+	}
+	
+	@Override
+	public void preStart(){
+		//create config for rabbit
+		rabbitConnection ! Connect
+	}
+
+}

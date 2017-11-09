@@ -1,0 +1,12 @@
+package servicios;
+
+import models.Entidades.Usuario;
+import play.libs.F.Promise;
+public class DAOUsuarios {
+	
+	public static Promise<Usuario> findById(String id){
+		return Promise.promise(() -> new Usuario("Félix") );
+		
+	}
+
+}

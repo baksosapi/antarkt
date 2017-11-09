@@ -1,0 +1,13 @@
+# OmenOS
+  - enfoque de server
+  - buena interfaz > adaptable a otras nubes
+  - plataforma SaaS
+  - alianzas con proveedores de VPS > externalizar soporte a nosotros
+  - monitoreo por parte de nosostros
+  - que los proveedores ganen por VPS / nos por servicio
+  - automatización (Puppet, Chef)
+  - cluster multi-datacenter
+  - reciclar infraestructura de VPS
+  - targets: Arch Linux, CentOS, Debian, Fedora, Gentoo, openSUSE, Slackware, and Ubuntu + CoreOS
+  - ser un reemplazo de CPanel, enfocado el el servicio a desplegar
+  - manejar red, máquina, correo, servicios, bds... todo lo que implica poseer un servicio en internet de forma sencilla

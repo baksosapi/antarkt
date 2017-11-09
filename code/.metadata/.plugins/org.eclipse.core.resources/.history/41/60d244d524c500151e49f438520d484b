@@ -1,0 +1,25 @@
+package servicios;
+
+import models.Entidades.Usuario;
+import play.libs.F.Promise;
+
+import org.jongo.Jongo;
+import org.jongo.MongoCollection;
+
+import com.mongodb.DB;
+import com.mongodb.MongoClient;
+import com.mongodb.client.MongoCursor;
+
+public class DAOUsuarios {
+	
+	private static DB db = new MongoClient().getDB("panel");
+	private static Jongo jongo = new Jongo(db);
+	public static MongoCollection usuarios = jongo.getCollection("usuarios");
+	
+	public static Promise<Usuario> findById(String id){
+		
+		return Promise.promise(() -> usuarios.findOne(id) );
+		
+	}
+
+}

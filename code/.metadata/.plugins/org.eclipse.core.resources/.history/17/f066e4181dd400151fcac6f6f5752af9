@@ -1,0 +1,24 @@
+package controllers;
+
+import java.util.concurrent.CompletableFuture;
+
+import models.entidades.*;
+import play.libs.Json;
+import play.mvc.*;
+import servicios.dao.DAOUsuarios;
+
+public class APIUsuarios extends APILectura<Usuario> {
+	
+	public APIUsuarios(){
+		super(new DAOUsuarios());
+	}	
+	
+	// Builder --> Mongo --> Result
+	public CompletableFuture<Result> insert(String name){
+		//Object u = UsuarioBuilder().withName("Hi hi").build();
+		//CompletableFuture<Object> result = this.dao.insert( u );
+		//return result.thenApply( (Usuario u) -> Results.ok( Json.toJson(u) ) );
+		return CompletableFuture.completedFuture( Results.ok("Hi") );
+	}
+	
+}

@@ -1,0 +1,42 @@
+package servicios.dao;
+
+import java.util.concurrent.CompletableFuture;
+
+import org.bson.types.ObjectId;
+import org.jongo.FindOne;
+import org.jongo.MongoCollection;
+
+import models.entidades.Entidad;
+import models.entidades.Usuario;
+
+public abstract class DAO<T extends Entidad> {
+	private String collectionName;
+	private Class<Usuario> collectionClass;
+	private Mongo mongo = new Mongo();
+	private MongoCollection collection = mongo.getCollection("usuarios");
+	
+	
+	public DAO(String string, Class<Usuario> class1) {
+		this.collectionName = string;
+		this.collectionClass = class1;
+	}
+
+	public CompletableFuture<T> findById(String id){ 
+		return CompletableFuture.supplyAsync( collection::findOne ).thenApply( this::materialize );
+	}
+	
+	public abstract T findByIdSync(String id);
+	
+	/** 
+	 * return o.as(Concrete.class)
+	 * @param o Erased-type class
+	 * @return T
+	 */
+	public T materialize(FindOne o){
+		o.as(collectionClass);
+		
+	}
+	public abstract CompletableFuture<T> findByName(String name);
+	public abstract CompletableFuture<T> insert(String g);
+
+}

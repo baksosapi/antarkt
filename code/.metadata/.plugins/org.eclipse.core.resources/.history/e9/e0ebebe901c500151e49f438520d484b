@@ -1,0 +1,17 @@
+package controllers;
+
+import play.mvc.*;
+import akka.actor.*;
+import javax.inject.*;
+
+@Singleton
+public class APIAgente {
+	
+	private ActorRef greeter; 
+
+	@Inject public Application(ActorSystem system){
+		greeter = system.actorOf(Props.create(servicios.Coordinador.class), "agente");
+		
+	}
+	
+}

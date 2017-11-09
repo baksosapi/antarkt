@@ -1,0 +1,33 @@
+package models.entidades;
+
+import java.time.LocalDate;
+import java.util.Optional;
+
+import org.bson.types.ObjectId;
+import org.jongo.marshall.jackson.oid.MongoId;
+
+public class Usuario implements Entidad {
+	@MongoId public final ObjectId id;
+	public final Plan plan;
+	public final String nombre;
+	public final LocalDate creacion;
+	
+	public Usuario(ObjectId i, String n, LocalDate c, Plan p){ this.id = i; this.nombre = n; this.creacion = c; this.plan = p; }
+	public Usuario(ObjectId i, String n){ this.id = i; this.nombre = n; this.creacion = LocalDate.now(); this.plan = new Plan(); }
+	
+	@Override
+	public ObjectId getId() {
+		// TODO Auto-generated method stub
+		return this.id;
+	}
+	@Override
+	public String getNombre() {
+		// TODO Auto-generated method stub
+		return this.nombre;
+	}
+	@Override
+	public LocalDate getCreacion() {
+		// TODO Auto-generated method stub
+		return this.creacion;
+	}
+}

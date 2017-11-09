@@ -1,0 +1,6 @@
+package models.Entidades;
+
+public class Usuario {
+	public Plan plan;
+
+}

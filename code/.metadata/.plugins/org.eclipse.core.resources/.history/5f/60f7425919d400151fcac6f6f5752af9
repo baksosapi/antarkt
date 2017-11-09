@@ -1,0 +1,28 @@
+package models.entidades;
+
+import java.time.LocalDate;
+
+public class Entorno implements Entidad {
+	
+	private java.util.List<Servicio> servicios;
+	//cocinado
+
+	@Override
+	public String getId() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public LocalDate getCreadoEn() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public String getNombre() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+}

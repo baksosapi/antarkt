@@ -1,0 +1,36 @@
+package controllers;
+
+import java.util.concurrent.CompletableFuture;
+
+import javax.swing.text.DefaultEditorKit.InsertBreakAction;
+
+import models.entidades.*;
+import play.mvc.*;
+import servicios.dao.DAOUsuarios;
+
+public class APIUsuarios extends APILectura<Usuario> {
+	
+	public APIUsuarios(){
+		super(new DAOUsuarios());
+	}
+	
+	public CompletableFuture<Result> findFirst(){
+		return findById("56a932337cdcad5e371ef045");
+	}
+	
+	public CompletableFuture<Result> register(){
+		return dao.insert( UsuarioFactory.builder().setNombre("dummy").setCreadoEn( java.time.LocalDate.now() )));
+	}
+	
+	
+	/*
+	
+	// Builder --> Mongo --> Result
+	public CompletableFuture<Result> insert(String name){
+		//Object u = UsuarioBuilder().withName("Hi hi").build();
+		//CompletableFuture<Object> result = this.dao.insert( u );
+		//return result.thenApply( (Usuario u) -> Results.ok( Json.toJson(u) ) );
+		return CompletableFuture.completedFuture( Results.ok("Hi") );
+	}*/
+	
+}

@@ -1,0 +1,45 @@
+package servicios.dao;
+
+import java.util.concurrent.CompletableFuture;
+
+import javax.inject.Inject;
+
+//import play.libs.F;
+
+import org.bson.types.ObjectId;
+import org.jongo.MongoCollection;
+
+import com.typesafe.config.Config;
+import com.typesafe.config.ConfigFactory;
+
+import models.entidades.Usuario;
+
+public class DAOUsuarios extends DAO<Usuario> {
+	
+	public DAOUsuarios(){
+		super("usuarios", Usuario.class);
+	}
+	
+	public F.Promise<Usuario> insert(String name) {
+		Usuario u = new Usuario();
+		if( true == usuarios.save(u).wasAcknowledged() ){ //block
+			return Promise.pure(u);
+		} else {
+			return Promise.throwing(new Throwable("Not saved"));
+		}
+		
+	}
+
+	@Override
+	public CompletableFuture<Usuario> findByName(String name) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public CompletableFuture<Usuario> insert(String g) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+}

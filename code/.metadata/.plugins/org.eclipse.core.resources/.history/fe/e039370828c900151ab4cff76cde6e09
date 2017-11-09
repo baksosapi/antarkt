@@ -1,0 +1,7 @@
+package models.entidades;
+
+public class Entorno {
+	private String nombre;
+	private java.util.List<servicio> servicios;
+
+}

@@ -1,0 +1,11 @@
+package servicios;
+
+public class RabbitConnection extends UntypedActor {
+	public void onReceive(Object msg){
+		if(msg instanceof RabbitProtocol.Connect)
+			RabbitProtocol.Connect c = (RabbitProtocol.Connect) msg;
+		} else {
+		
+		}
+
+}

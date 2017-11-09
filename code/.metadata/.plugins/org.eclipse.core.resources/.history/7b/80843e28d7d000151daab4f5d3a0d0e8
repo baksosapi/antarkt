@@ -1,0 +1,8 @@
+package models.mensajes;
+
+import org.immutables.value.Value;
+
+@Value.Immutable
+public interface Msg {
+	public String value();
+}

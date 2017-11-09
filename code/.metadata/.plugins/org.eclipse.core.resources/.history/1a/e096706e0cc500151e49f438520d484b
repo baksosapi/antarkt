@@ -1,0 +1,11 @@
+package servicios;
+
+import models.*;
+
+public class DAOUsuarios {
+	
+	public static Future<Usuario> findById(String id){
+		
+	}
+
+}

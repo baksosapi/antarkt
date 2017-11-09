@@ -1,0 +1,24 @@
+package servicios;
+
+import akka.actor.OneForOneStrategy;
+import akka.actor.SupervisorStrategy;
+import akka.actor.SupervisorStrategy.Directive;
+import static akka.actor.SupervisorStrategy.resume;
+import static akka.actor.SupervisorStrategy.restart;
+import static akka.actor.SupervisorStrategy.stop;
+import static akka.actor.SupervisorStrategy.escalate;
+import akka.actor.*;
+import scala.concurrent.duration.Duration;
+
+// Fuente de mensajes de todo el sistema
+// TODO: Aislar estados (become): Conectado / No conectado
+public class RabbitManager extends UntypedActor {
+	
+	ActorRef rabbitWorker = getContext(). actorOf(RabbitWorker.class, "worker");
+	 
+	private final String QUEUE_NAME = "panel";
+	private final String UTF8 = "UTF-8";
+
+	// export
+
+}

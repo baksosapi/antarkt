@@ -1,0 +1,6 @@
+package models.entidades;
+
+public abstract class Aplicacion extends Entidad{
+	public abstract String nombre();
+	public abstract java.util.Set<Entorno> entornos();
+}

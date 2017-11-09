@@ -1,0 +1,12 @@
+package models.entidades;
+
+public class Plan {
+	public java.time.LocalDate inicio;
+	public TipoDePlan plan;
+	
+	
+	public enum TipoDePlan {
+		Gratuito, Tier1, Tier2, Tier3, Custom
+	}
+
+}

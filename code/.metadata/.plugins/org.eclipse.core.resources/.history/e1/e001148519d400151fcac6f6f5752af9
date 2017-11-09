@@ -1,0 +1,29 @@
+package models.entidades;
+
+import java.time.LocalDate;
+
+public class Aplicacion implements Entidad{
+	private String nombre;
+	private java.util.Set<Entorno> entornos;
+
+	public String getNombre() {
+		return nombre;
+	}
+
+	public void setNombre(String nombre) {
+		this.nombre = nombre;
+	}
+
+	@Override
+	public String getId() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public LocalDate getCreadoEn() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+}

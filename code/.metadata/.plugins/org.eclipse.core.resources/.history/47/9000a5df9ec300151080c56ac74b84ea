@@ -1,0 +1,6 @@
+package servicios
+
+object ProtocoloAgente {
+  case class Hola(val msg:String)
+  case class Apuntar(id:String)
+}

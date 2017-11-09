@@ -1,0 +1,19 @@
+package servicios;
+/*
+
+MongoCursor<Friend> all = friends.find("{name: 'Joe'}").as(Friend.class);
+Friend one = friends.findOne("{name: 'Joe'}").as(Friend.class);*/
+
+
+public class Mongo {
+	
+/*	private static DB db = new MongoClient().getDB("panel");
+	public static Jongo jongo = new Jongo(db);
+	
+	public static FindOne single(String query){
+		return jongo.getCollection("usuarios").findOne(query);
+		//return usuarios.findOne("{}") //.as(models.Entidades.Usuario.class);
+	}*/
+	
+
+}

@@ -1,0 +1,9 @@
+package models.mensajes;
+
+public interface Message {
+	public String referencia();
+	public java.util.Optional<Long> duracion();
+	public java.util.Optional<Estado> estado();
+	public java.util.Optional<Long> progreso();
+	
+}

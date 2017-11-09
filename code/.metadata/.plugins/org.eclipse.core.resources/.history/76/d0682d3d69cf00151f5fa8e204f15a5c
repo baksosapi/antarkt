@@ -1,0 +1,40 @@
+package servicios.rabbit;
+import com.rabbitmq.client.Channel;
+
+import akka.actor.Props;
+import akka.actor.UntypedActor;
+
+public class RabbitChannel extends UntypedActor {
+	
+	ActorRef worker = getContext().actorOf(Props.create(RabbitWorker.class, "worker")); //Considerar router
+	
+	@Override
+	public void onReceive(Object msg) throws Exception {
+		if(msg instanceof RabbitProtocol.CreateChannel){
+			RabbitProtocol.CreateChannel c = (RabbitProtocol.CreateChannel) msg;
+		} else {
+			unhandled(msg);
+		}
+	}
+	
+	private void ack(RabbitProtocol.Ack ack, Channel channel) throws Exception {
+		try {
+			if(channel != null){
+				System.out.println("CHANNEL WAS NOT NULL");
+				channel.basicAck(ack.tag, false);
+				System.out.println("CHANNEL WAS NOT NULL");
+			} else {
+				System.out.println("CHANNEL WAS NULL");
+			} if(ack != null){
+				System.out.println("tag" + ack.tag + " < tag");
+			} else {
+				System.out.println("TAG WAS NULL");
+			}
+		} catch (Exception e){
+			throw new RabbitProtocol.AckException();
+		}
+		
+		
+	}
+
+}

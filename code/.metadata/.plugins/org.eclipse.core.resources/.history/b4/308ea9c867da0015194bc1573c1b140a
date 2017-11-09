@@ -1,0 +1,12 @@
+import com.google.inject.AbstractModule;
+import play.libs.akka.AkkaGuiceSupport;
+import servicios.rabbit.RabbitManager;
+
+public class Modules extends AbstractModule implements AkkaGuiceSupport {
+    @Override
+    protected void configure() {
+        bindActor(SupervisorRabbit.class, "rabbit-service");
+        bindActor(SupervisorAgente.class, "agent-service");
+        bindActor(SupervisorMongo.class, "mongo-service");
+    }
+}

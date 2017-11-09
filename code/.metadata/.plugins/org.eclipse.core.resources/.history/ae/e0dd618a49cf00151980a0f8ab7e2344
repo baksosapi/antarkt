@@ -1,0 +1,35 @@
+package controllers;
+
+import play.mvc.*;
+import servicios.rabbit.*;
+import akka.actor.*;
+import javax.inject.*;
+import views.html.*;
+
+@Singleton
+public class Application extends Controller {
+	final ActorRef greeter;
+	final ActorRef manager;
+	
+	@Inject public Application(ActorSystem system){
+		greeter = system.actorOf(Props.create(servicios.Coordinador.class), "agente");
+		manager = system.actorOf(Props.create(RabbitManager.class), "agente");
+		try {
+			System.out.println("Connecting to Rabbit");
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
+
+    public Result index() {
+    	greeter.tell(new servicios.ProtocoloAgente.Hola("does it works?"), ActorRef.noSender());
+        return Results.ok(index.render("Your new application is ready."));
+    }
+    
+    public Result anunciar(String id){
+    	greeter.tell( new servicios.ProtocoloAgente.Anunciar(id), ActorRef.noSender() );
+    	return Results.found("hi mom"); 
+    }
+
+}

@@ -1,0 +1,15 @@
+package servicios;
+
+import akka.actor.*;
+
+public class Coordinador extends UntypedActor {
+
+	public void onReceive(Object msg) throws Exception {
+        if (msg instanceof ProtocoloAgente.Ack) {
+        	System.out.println( ((ProtocoloAgente.Hola) msg).msg() );
+        } else if(msg instanceof ProtocoloAgente.Anunciar){
+        	System.out.println("Anunciar" + ((ProtocoloAgente.Anunciar) msg).token() );
+        }
+    }
+
+}

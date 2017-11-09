@@ -1,0 +1,3 @@
+package models.entidades;
+
+case class Agente(val token:String)

@@ -1,0 +1,61 @@
+package servicios.agente;
+
+import java.time.LocalDateTime;
+import java.util.Optional;
+
+import net.schmizz.sshj.SSHClient;
+import net.schmizz.sshj.common.IOUtils;
+import net.schmizz.sshj.connection.channel.direct.Session;
+import net.schmizz.sshj.connection.channel.direct.Session.Command;
+import akka.actor.UntypedActor;
+import models.entidades.Agente;
+// Coordinador disponible en: getContext().parent()
+public class ActorAgente extends UntypedActor {
+	
+	public ActorAgente(Agente a){
+		this.agente = a;
+	}
+	
+	private boolean wasContacted;
+	private Optional<LocalDateTime> lastContact;
+	private Agente agente;
+	// XXX Implicaria tener toda la coleccion de Agentes activos en memoria!
+	//Debe ser mutable (no final), ya que es un cache de lo que hay en la BD. Eventualmente se sincronizan.
+	
+	//Necesito token, ip, dominio...
+	public void onReceive(Object msg){
+		if (msg instanceof ProtocoloAgente.Pong) {
+			wasContacted = true;
+			lastContact = Optional.of( LocalDateTime.now() );
+		} else if(msg instanceof ProtocoloAgente.Status) {
+			getSender().tell( new ProtocoloAgente.StatusReport(wasContacted, lastContact), getSelf() );
+		} else if(msg instanceof ProtocoloAgente.Ping){
+			ping();
+		}
+	}
+
+	private void ping() {
+		// TODO Auto-generated method stub
+		
+	}
+	
+	private void instalar(ProtocoloAgente.Instalar i){
+		final SSHClient ssh = new SSHClient();
+		ssh.connect(i.ip());
+        try {
+            ssh.authPublickey(System.getProperty("user.name"));
+            final Session session = ssh.startSession();
+            try {
+                final Command cmd = session.exec("ping -c 1 google.com");
+                System.out.println(IOUtils.readFully(cmd.getInputStream()).toString());
+                cmd.join(5, TimeUnit.SECONDS);
+                System.out.println("\n** exit status: " + cmd.getExitStatus());
+            } finally {
+                session.close();
+            }
+        } finally {
+            ssh.disconnect();
+        }
+	}
+
+}

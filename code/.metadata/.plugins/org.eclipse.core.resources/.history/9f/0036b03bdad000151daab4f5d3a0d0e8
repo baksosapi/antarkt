@@ -1,0 +1,15 @@
+package models.mensajes;
+
+import java.lang.annotation.Target;
+
+import org.immutables.value.Value;
+
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+
+@Value.Immutable
+@JsonDeserialize(as=ImmutableStringMessage.class) //Magia negra
+@JsonSerialize(as=ImmutableStringMessage.class) //MagiaNegra
+public abstract class StringMessage implements Message {
+	public abstract String body();
+}

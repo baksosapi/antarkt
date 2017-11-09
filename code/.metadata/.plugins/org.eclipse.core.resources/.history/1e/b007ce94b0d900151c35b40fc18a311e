@@ -1,0 +1,16 @@
+package servicios.dao;
+
+import javax.inject.Inject;
+import javax.inject.Singleton;
+
+import models.entidades.*;
+
+@Singleton
+public class DAOUsuarios extends DAO<Usuario> {
+	
+	@Inject public DAOUsuarios(JongoDatabase jd){
+		super(jd, "usuarios", Usuario.class);
+		//Usuario u = UsuarioFactory.builder().setNombre("Mark").setId("Twain").build(); //.builder().setNombre("mark").setId("ER%NHSHYS&S").setPlan(new Plan()).build();
+	}
+
+}

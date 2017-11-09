@@ -1,0 +1,15 @@
+package models.entidades;
+
+import java.time.LocalDate;
+import java.util.Optional;
+
+import org.bson.types.ObjectId;
+import org.jongo.marshall.jackson.oid.MongoObjectId;
+
+public abstract class Entidad {
+	@MongoObjectId
+	public String id;
+	public Optional<String> some();
+	public LocalDate getCreadoEn();
+	public String getNombre();
+}

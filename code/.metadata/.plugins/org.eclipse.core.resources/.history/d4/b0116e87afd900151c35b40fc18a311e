@@ -1,0 +1,13 @@
+package servicios.dao;
+
+import com.google.inject.AbstractModule;
+
+public class MongoModule extends AbstractModule {
+
+	@Override
+	protected void configure() {
+		bind(Mongo.class).to(MongoImpl.class);
+
+	}
+
+}

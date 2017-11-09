@@ -1,0 +1,9 @@
+package snippet;
+
+public class Snippet {
+	public static void main(String[] args) {
+		resolvers += 
+		  "Sonatype OSS Snapshots" at "https://oss.sonatype.org/content/repositories/snapshots"
+	}
+}
+

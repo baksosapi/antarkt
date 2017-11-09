@@ -1,0 +1,11 @@
+package servicios.agente;
+
+import akka.actor.UntypedActor;
+
+public class Agente extends UntypedActor {
+	
+	public void onReceive(Object msg){
+		
+	}
+
+}

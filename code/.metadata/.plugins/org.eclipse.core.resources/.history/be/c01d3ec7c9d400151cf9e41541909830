@@ -1,0 +1,25 @@
+package models.entidades
+import java.time.LocalDate;
+
+
+trait Entidad {
+  val nombre:String;
+  val id:String;
+  val creacion:LocalDate;
+}
+
+case class Plan(val inicio:LocalDate = LocalDate.now(), val tipo:TipoDePlan = TipoDePlan.Gratuito)
+
+case class Usuario (
+    val id:String,
+    val nombre:String,
+    val creacion:LocalDate,
+    val plan:Plan = new Plan()
+) extends Entidad
+
+case class Maquina (
+    val id:String,
+    val nombre:String,
+    val creacion:LocalDate,
+    val ip:String
+) extends Entidad

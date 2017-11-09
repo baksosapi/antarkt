@@ -1,0 +1,59 @@
+package servicios.rabbit;
+
+import com.fasterxml.jackson.core.JsonParseException;
+import com.fasterxml.jackson.databind.JsonNode;
+import akka.actor.UntypedActor;
+import servicios.rabbit.RabbitProtocol.RawMessage;
+import models.mensajes.StringMessage;
+
+public class RabbitWorker extends UntypedActor {
+	@Override
+	public void onReceive(Object msg) throws Exception {
+		if(msg instanceof RabbitProtocol.RawMessage){
+			RabbitProtocol.RawMessage raw = (RabbitProtocol.RawMessage) msg;
+			convertToJson(raw);
+		} else {
+			unhandled(msg);
+		}
+	}
+
+	private void convertToJson(RawMessage raw) throws Exception {
+		if(raw.properties.getContentType() == "json"){
+			
+		
+		try {
+			JsonNode node = play.libs.Json.parse(raw.body);
+			getSender().tell( new RabbitProtocol.Ack(raw.envelope.getDeliveryTag()), getSelf() );
+			System.out.println(" [x] Received '" + node + "'" + " from key " + raw.envelope.getRoutingKey());
+	        System.out.println(" Delivery tag: " + raw.envelope.getDeliveryTag() + " / Consumer Tag " + raw.consumerTag + "\n");
+	        deliver(node, raw.envelope.getRoutingKey() );
+		} catch (RuntimeException e){
+			System.out.println( new String(raw.body, "UTF-8") ); // XXX
+			//throw new RabbitProtocol.DecodeException(e, raw.body);
+			// prisma ! invalid message content
+		}
+		} else {
+			System.out.println( "Unknown message content-type: " + raw.properties.getContentType() );
+		}
+		//Send to destination
+	}
+
+	private void deliver(JsonNode json, String key) throws Exception {
+
+		try {
+
+			StringMessage msg = play.libs.Json.fromJson(json, StringMessage.class);
+			if(msg == null){
+				System.out.println( "null instead of Msg");	
+			} else {
+				System.out.println( msg.body() + " " + msg.referencia() + " / " + msg.estado() );
+			}
+		} catch (Exception e){
+			System.out.println("deserializaion failed" );
+			e.printStackTrace();
+
+		}
+
+	}
+
+}

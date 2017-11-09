@@ -1,0 +1,49 @@
+package servicios.rabbit;
+
+import com.rabbitmq.client.AMQP;
+import com.rabbitmq.client.Envelope;
+
+public class RabbitProtocol {
+	public static class AckException extends Exception {
+		private static final long serialVersionUID = 1L;
+	}
+	// TODO Agregar mensaje para consola
+	public static class DecodeException extends Exception {
+		private static final long serialVersionUID = 1L;
+		public final byte[] body;
+		public final Throwable t;
+		public DecodeException(Throwable t, byte[] body){
+			this.body = body;
+			this.t = t;	
+		}
+	}
+
+	//Connection
+	public static class Connect {
+		public Connect(String queue){ this.queueName = queue; }
+		public final String queueName;
+	}
+	
+	public static class Disconnect { }
+	public static class ConnectionSuccess {}
+	public static class ChannelSuccess {}
+	
+	// Messaging
+	public static class RawMessage {
+		public final Envelope envelope;
+		public final AMQP.BasicProperties properties;
+		public final byte[] body;
+		public final String consumerTag;
+		public RawMessage(long tag,AMQP.BasicProperties properties, String consumerTag, byte[] body){
+			this.tag = tag;
+			this.properties = properties;
+			this.body = body;
+			this.consumerTag = consumerTag;
+		}
+	}
+	
+	public static class Ack {
+		public long tag;
+		public Ack(long tag){ this.tag = tag; }
+	}
+}

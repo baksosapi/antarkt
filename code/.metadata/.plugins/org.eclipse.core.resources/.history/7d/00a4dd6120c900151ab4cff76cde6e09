@@ -1,0 +1,19 @@
+package models.entidades;
+
+public class Maquina {
+	private String ip;
+	private String getIp() {
+		return ip;
+	}
+	public void setIp(String ip) {
+		this.ip = ip;
+	}
+	public java.util.List<Aplicacion> getAplicaciones() {
+		return aplicaciones;
+	}
+	public void setAplicaciones(java.util.List<Aplicacion> aplicaciones) {
+		this.aplicaciones = aplicaciones;
+	}
+	public java.util.List<Aplicacion> aplicaciones;
+
+}

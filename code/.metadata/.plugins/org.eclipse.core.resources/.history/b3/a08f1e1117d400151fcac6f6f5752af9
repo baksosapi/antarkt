@@ -1,0 +1,9 @@
+package models.entidades;
+
+import org.immutables.value.Value;
+
+class Usuario implements Entidad {
+	
+	public abstract Plan getPlan();
+	
+}

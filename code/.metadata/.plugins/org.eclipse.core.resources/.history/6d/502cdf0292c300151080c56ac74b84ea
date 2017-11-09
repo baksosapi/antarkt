@@ -1,0 +1,22 @@
+package controllers;
+
+//import play.*;
+import play.mvc.*;
+import akka.actor.*;
+import javax.inject.*;
+import views.html.*;
+
+@Singleton
+public class Application extends Controller {
+	final ActorRef greeter = system.actorOf(Props.create(servicios.Agente.class), "agente");
+	
+	@Inject public Application(ActorSystem system){
+		
+		
+	}
+
+    public Result index() {
+        return Results.ok(index.render("Your new application is ready."));
+    }
+
+}

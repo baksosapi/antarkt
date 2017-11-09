@@ -1,0 +1,127 @@
+package servicios.rabbit;
+
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.security.KeyStore;
+import java.util.List;
+
+import javax.net.ssl.SSLContext;
+import javax.net.ssl.TrustManagerFactory;
+
+import com.rabbitmq.client.AMQP;
+import com.rabbitmq.client.Address;
+import com.rabbitmq.client.Channel;
+import com.rabbitmq.client.Connection;
+import com.rabbitmq.client.ConnectionFactory;
+import com.rabbitmq.client.Consumer;
+import com.rabbitmq.client.DefaultConsumer;
+import com.rabbitmq.client.Envelope;
+import com.typesafe.config.Config;
+import com.typesafe.config.ConfigFactory;
+
+import akka.actor.UntypedActor;
+import play.libs.Json;
+import servicios.rabbit.RabbitProtocol;
+
+
+public class RabbitConnection extends UntypedActor {
+	
+	private Channel channel;
+	private Connection connection;
+	private Config config;
+	
+	@Override
+	public void onReceive(Object msg) throws Exception {
+		if(msg instanceof RabbitProtocol.Connect){
+			RabbitProtocol.Connect c = (RabbitProtocol.Connect) msg;
+			connect(c);
+		} else if(msg instanceof RabbitProtocol.Disconnect){
+			RabbitProtocol.Disconnect d = (RabbitProtocol.Disconnect) msg;
+			disconnect(d);
+		} else if(msg instanceof RabbitProtocol.Ack){
+			RabbitProtocol.Ack ack = (RabbitProtocol.Ack) msg;
+			ack(ack);
+		} else {
+		      unhandled(msg);
+	    }
+	}
+	
+	private void ack(RabbitProtocol.Ack ack) throws Exception {
+		try {
+			channel.basicAck(ack.tag, false);
+		} catch (Exception e){
+			
+		}
+		System.out.println("tag" + ack.tag + " < tag");
+		
+	}
+
+	@Override
+	public void postStop() throws Exception {
+		closeAll();
+	}
+	
+	// ConfigurationException, SSLException, RabbitException
+	public void connect(RabbitProtocol.Connect c) throws Exception {
+		ConnectionFactory factory = new ConnectionFactory();
+	    char[] keyPassPhrase = "secret".toCharArray();
+	    
+	    // Leer configuración para Rabbit desde application.conf 
+		config = ConfigFactory.load();
+		List<String> clusterAddresses = config.getStringList("rabbit.cluster");
+		int clusterPort = config.getInt("rabbit.port");
+		
+		// Si no están definidos los nodos, la conexión no va a suceder
+		assert clusterAddresses.size() >= 3 : "Se requieren 3 IPs de nodos bajo la llave 'rabbit.cluster' exponiendo el mismo puerto en la configuración para enlazar al cluster. ";
+		
+        // Certificados SSL
+        KeyStore tks = KeyStore.getInstance("JKS");
+        tks.load(new FileInputStream( config.getString("rabbit.certificates.path") ), keyPassPhrase);            
+        TrustManagerFactory tmf = TrustManagerFactory.getInstance("SunX509");
+        tmf.init(tks);
+        SSLContext sslContext = SSLContext.getInstance( "TLS" );
+        sslContext.init(null, tmf.getTrustManagers(), null);
+
+        factory.setUsername( "santos" );
+        factory.setPassword( "rhino.metal.acid.cover" );
+	    factory.useSslProtocol(sslContext);
+	    Address[] cluster = { new Address(clusterAddresses.get(0), clusterPort), new Address(clusterAddresses.get(1), clusterPort), new Address(clusterAddresses.get(2), clusterPort)};
+	    
+	    connection = factory.newConnection( cluster ); // XXX: Bloquea
+	    getSender().tell( new RabbitProtocol.ConnectionSuccess(), getSelf() );
+	    
+	    // XXX
+	    Channel channel = connection.createChannel();
+	    channel.queueDeclarePassive( c.queueName );
+	    Consumer consumer = new DefaultConsumer(channel) {
+		      @Override
+		      public void handleDelivery(String consumerTag, Envelope envelope, AMQP.BasicProperties properties, byte[] body)
+		          throws IOException {
+		    	  
+		        String message = new String(body, "UTF-8" );
+		        
+		        System.out.println(" [x] Received '" + message + "'" + "from key " + envelope.getRoutingKey() + " as JSON \n" + Json.parse(message) + "\n");
+		        System.out.println(" Delivery tag: " + envelope.getDeliveryTag() + " / Consumer Tag " + consumerTag + "\n");
+		        
+		        c.worker.tell( new RabbitProtocol.RawMessage(envelope.getDeliveryTag(), envelope.getRoutingKey(), body), getSelf() );
+		      
+		      }
+	    };
+	    channel.basicConsume(c.queueName, false, consumer);
+	}
+	
+	private void disconnect(RabbitProtocol.Disconnect d) throws Exception {
+		closeAll();
+	}
+	
+	private void closeAll() throws Exception {
+		if( channel != null && channel.isOpen() ){
+			channel.close();
+		}
+		
+		if( connection != null && connection.isOpen() ){
+			connection.close();
+		}
+	}
+
+}

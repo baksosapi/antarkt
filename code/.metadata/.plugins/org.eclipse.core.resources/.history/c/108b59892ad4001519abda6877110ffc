@@ -1,0 +1,31 @@
+package servicios.dao;
+
+import org.jongo.*;
+import com.mongodb.*;
+
+public class Mongo {
+	
+	final DB db;
+	final Jongo jongo;
+	final MongoClient mongo;
+	
+	public Mongo(){
+		mongo = new MongoClient("localhost", 32768);
+		db = mongo.getDB("panel");
+		jongo = new Jongo(db);
+	}
+	
+	public MongoCollection getCollection(String name){
+		return this.jongo.getCollection(name);
+	}
+	
+	public DB getDatabase(){
+		return this.jongo.getDatabase();
+	}
+	
+	public void close(){
+		this.mongo.close();
+	}
+	
+
+}

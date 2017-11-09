@@ -1,0 +1,22 @@
+package servicios;
+import org.bson.types.ObjectId;
+import org.hamcrest.core.IsInstanceOf;
+
+import akka.actor.*;
+
+public class SupervisorAgente extends UntypedActor {
+	
+	class Crear {
+		final ObjectId databaseId;
+		
+		
+	}
+	
+	public void onReceive(Object msg){
+		if(msg instanceof SupervidorAgente.Crear){
+			
+		}
+		
+	}
+
+}

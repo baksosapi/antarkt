@@ -1,0 +1,32 @@
+package servicios.agente
+import java.util.UUID;
+
+/*
+ * Se hace necesario distinguir entre mensajes entrantes, salientes e internos
+ * tanto entrantes como salientes usan el token como direccion de destino (el MQ traduce token a IP)
+ */
+
+object ProtocoloAgente {
+  sealed trait Saliente {}
+  sealed trait Entrante {}
+  // Envoltorios
+  case class Outgoing(val token:UUID, val msg:Saliente)
+  case class Incoming(val token:UUID, val msg:Entrante)
+  //case class Entrante(val token:UUID, val msg:Entrante)
+
+  // Comprobaciones
+  case class Ping() extends Saliente
+  case class Pong() extends Entrante
+
+  // Reportes
+  case class Anunciar(token:UUID)
+  case class Ack(referencia: String)
+  case class Status()
+  case class StatusReport(wasContacted:Boolean, lastContact:java.util.Optional[java.time.LocalDateTime])
+
+  // Operacion
+  case class Desactivar(causa:String)
+  case class Actualizar(imagen:String, tag:String, version:String)
+  
+}
+

@@ -1,0 +1,39 @@
+package servicios.agente;
+
+import java.time.LocalDateTime;
+import java.util.Optional;
+import java.util.UUID;
+
+import akka.actor.UntypedActor;
+import models.entidades.Agente;
+// Coordinador disponible en: getContext().parent()
+public class ActorAgente extends UntypedActor {
+	
+	public ActorAgente(Agente a){
+		this.agente = a;
+	}
+	
+	private boolean wasContacted;
+	private Optional<LocalDateTime> lastContact;
+	private Agente agente;
+	// XXX Implicaria tener toda la coleccion de Agentes activos en memoria!
+	//Debe ser mutable (no final), ya que es un cache de lo que hay en la BD. Eventualmente se sincronizan.
+	
+	//Necesito token, ip, dominio...
+	public void onReceive(Object msg){
+		if (msg instanceof ProtocoloAgente.Pong) {
+			wasContacted = true;
+			lastContact = Optional.of( LocalDateTime.now() );
+		} else if(msg instanceof ProtocoloAgente.Status) {
+			getSender().tell( new ProtocoloAgente.StatusReport(wasContacted, lastContact), getSelf() );
+		} else if(msg instanceof ProtocoloAgente.Ping){
+			ping();
+		}
+	}
+
+	private void ping() {
+		// TODO Auto-generated method stub
+		
+	}
+
+}

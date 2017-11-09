@@ -1,0 +1,100 @@
+package servicios.rabbit;
+
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.security.KeyStore;
+import java.util.List;
+
+import javax.net.ssl.SSLContext;
+import javax.net.ssl.TrustManagerFactory;
+
+import com.rabbitmq.client.AMQP;
+import com.rabbitmq.client.Address;
+import com.rabbitmq.client.Channel;
+import com.rabbitmq.client.Connection;
+import com.rabbitmq.client.ConnectionFactory;
+import com.rabbitmq.client.Consumer;
+import com.rabbitmq.client.DefaultConsumer;
+import com.rabbitmq.client.Envelope;
+import com.typesafe.config.Config;
+import com.typesafe.config.ConfigFactory;
+
+import akka.actor.Props;
+import akka.actor.ActorRef;
+import akka.actor.UntypedActor;
+import servicios.rabbit.RabbitProtocol;
+
+
+public class RabbitConnection extends UntypedActor {
+	
+	private Connection connection;
+	private Config config;
+	private ActorRef rabbitChannel;
+	
+	@Override
+	public void onReceive(Object msg) throws Exception {
+		if(msg instanceof RabbitProtocol.Connect){
+			RabbitProtocol.Connect c = (RabbitProtocol.Connect) msg;
+			connect(c);
+		} else if(msg instanceof RabbitProtocol.Disconnect){
+			RabbitProtocol.Disconnect d = (RabbitProtocol.Disconnect) msg;
+			disconnect(d);
+		} else if(msg instanceof RabbitProtocol.ConnectionSuccess){
+			getContext().parent().tell( new RabbitProtocol.ConnectionSuccess(), getSelf() );
+
+		} else {
+		      unhandled(msg);
+	    }
+	}
+
+	@Override
+	public void postStop() throws Exception {
+		closeAll();
+	}
+	
+	// ConfigurationException, SSLException, RabbitException
+	public void connect(RabbitProtocol.Connect c) throws Exception {
+		System.out.println("Conecting...");
+		ConnectionFactory factory = new ConnectionFactory();
+	    char[] keyPassPhrase = "secret".toCharArray();
+	    
+	    // Leer configuración para Rabbit desde application.conf 
+		config = ConfigFactory.load();
+		List<String> clusterAddresses = config.getStringList("rabbit.cluster");
+		int clusterPort = config.getInt("rabbit.port");
+		
+		// Si no están definidos los nodos, la conexión no va a suceder
+		assert clusterAddresses.size() >= 3 : "Se requieren 3 IPs de nodos bajo la llave 'rabbit.cluster' exponiendo el mismo puerto en la configuración para enlazar al cluster. ";
+		
+        // Certificados SSL
+        KeyStore tks = KeyStore.getInstance("JKS");
+        tks.load(new FileInputStream( config.getString("rabbit.certificates.path") ), keyPassPhrase);            
+        TrustManagerFactory tmf = TrustManagerFactory.getInstance("SunX509");
+        tmf.init(tks);
+        SSLContext sslContext = SSLContext.getInstance( "TLS" );
+        sslContext.init(null, tmf.getTrustManagers(), null);
+
+        factory.setUsername( "santos" );
+        factory.setPassword( "rhino.metal.acid.cover" );
+	    factory.useSslProtocol(sslContext);
+	    Address[] cluster = { new Address(clusterAddresses.get(0), clusterPort), new Address(clusterAddresses.get(1), clusterPort), new Address(clusterAddresses.get(2), clusterPort)};
+	    
+	    connection = factory.newConnection( cluster ); // XXX: Bloquea
+	    getSender().tell( new RabbitProtocol.ConnectionSuccess(), getSelf() );
+	    
+	    // XXX
+	    rabbitChannel = getContext().actorOf(Props.create(RabbitChannel.class, connection.createChannel(), c.queueName ), "channel");
+	    System.out.println("...connected.");
+	}
+	
+	private void disconnect(RabbitProtocol.Disconnect d) throws Exception {
+		closeAll();
+	}
+	
+	private void closeAll() throws Exception {
+		if( connection != null && connection.isOpen() ){
+			connection.close();
+		}
+	}
+
+}

@@ -1,0 +1,49 @@
+package servicios.dao;
+
+import java.util.concurrent.CompletableFuture;
+
+import org.bson.types.ObjectId;
+import org.jongo.FindOne;
+import org.jongo.MongoCollection;
+
+import models.entidades.Entidad;
+
+public abstract class DAO<T extends Entidad> { // <T extends Entidad>
+	private String collectionName;
+	private Class<T> collectionClass;
+	private Mongo mongo = new Mongo();
+	private MongoCollection collection;
+	
+	public DAO(String string, Class<T> class1) {
+		this.collectionName = string;
+		this.collectionClass = class1;
+		if(this.mongo != null){
+			this.collection = mongo.getCollection(collectionName);
+		} else {
+			System.err.println("Mongo WAS NULL on DAO<?>");
+		}
+		 
+	}
+
+	public CompletableFuture<T> findById(String id){ 
+		return CompletableFuture.supplyAsync( () -> collection.findOne(new ObjectId(id) ) ).thenApply( this::materialize );
+	}
+	
+	public CompletableFuture<T> findByName(String name){
+		return CompletableFuture.supplyAsync( () -> collection.findOne("{name: #}", name) ).thenApply( this::materialize); 
+	}
+	
+	public CompletableFuture<Boolean> insert(T u){
+		return CompletableFuture.supplyAsync( () -> collection.save(u) ).thenApply( r -> r.wasAcknowledged() );
+	}
+	
+	public CompletableFuture<Boolean> remove(String id){
+		return CompletableFuture.supplyAsync( () -> collection.remove(new ObjectId(id) ) ).thenApply( wr -> wr.wasAcknowledged() );
+	}
+	
+	private T materialize(FindOne o){
+		return o.as(collectionClass);
+		
+	}
+
+}

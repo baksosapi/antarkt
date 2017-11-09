@@ -1,0 +1,19 @@
+package servicios;
+
+class RabbitProtocol {
+	
+	public class Connect {
+		public Connect(String queue){ this.queueName = queue; }
+		
+		private final String queueName;
+		public String getQueueName(){ return this.queueName; }
+		
+		private final List<Address> queueName;
+		public String getQueueName(){ return this.queueName; }
+		
+		
+	}
+	
+	public class Disconnect { }
+
+}

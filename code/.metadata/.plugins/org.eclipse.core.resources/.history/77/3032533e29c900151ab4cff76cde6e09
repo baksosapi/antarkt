@@ -1,0 +1,14 @@
+package models.entidades;
+
+public class Servicio {
+	private boolean requiereIdentificacion;
+
+	public boolean isRequiereIdentificacion() {
+		return requiereIdentificacion;
+	}
+
+	public void setRequiereIdentificacion(boolean requiereIdentificacion) {
+		this.requiereIdentificacion = requiereIdentificacion;
+	}
+
+}

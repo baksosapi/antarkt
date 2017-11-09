@@ -1,0 +1,23 @@
+package controllers;
+
+import play.mvc.*;
+import akka.actor.*;
+import javax.inject.*;
+
+@Singleton
+public class APIAgente {
+	
+	private ActorRef prisma; 
+
+	@Inject public APIAgente(ActorSystem system){
+		prisma = system.actorOf(Props.create(servicios.Prisma.class), "prisma");
+	}
+	
+	public Result listar(String filter, short limit, short pagina){
+		prisma.tell("listar", ActorRef.noSender() );
+		return Results.TODO;
+	}
+	
+	
+	
+}

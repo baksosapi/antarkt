@@ -1,0 +1,9 @@
+package models.entidades;
+
+import org.immutables.value.Value;
+
+@Value.Immutable
+public abstract class Aplicacion extends Entidad{
+	public abstract String nombre();
+	public abstract java.util.Set<Entorno> entornos();
+}

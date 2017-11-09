@@ -1,0 +1,23 @@
+package servicios.dao;
+
+import java.util.concurrent.CompletableFuture;
+
+import javax.inject.Inject;
+
+//import play.libs.F;
+
+import org.bson.types.ObjectId;
+import org.jongo.MongoCollection;
+
+import com.typesafe.config.Config;
+import com.typesafe.config.ConfigFactory;
+
+import models.entidades.Usuario;
+
+public class DAOUsuarios extends DAO<Usuario> {
+	
+	public DAOUsuarios(){
+		super("usuarios", Usuario.class);
+	}
+
+}

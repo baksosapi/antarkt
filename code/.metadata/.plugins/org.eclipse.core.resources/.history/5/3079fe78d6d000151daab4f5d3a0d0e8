@@ -1,0 +1,7 @@
+package models.mensajes;
+
+@Value.Immutable
+@Message
+public interface Msg {
+	public String value();
+}

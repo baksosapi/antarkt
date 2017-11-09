@@ -1,0 +1,24 @@
+package servicios;
+import org.bson.types.ObjectId;
+import org.hamcrest.core.IsInstanceOf;
+
+import akka.actor.*;
+
+public class SupervisorAgente extends UntypedActor {
+	
+	public class Crear {
+		public final ObjectId remoteId;
+		
+		public Crear(ObjectId assignedAgentId){ this.remoteId = assigneAgentId; }
+	}
+	
+	public void onReceive(Object msg){
+		if(msg instanceof SupervisorAgente.Crear){
+			SupervisorAgente.Crear crear = (SupervisorAgente.Crear) msg;
+			
+			
+		}
+		
+	}
+
+}

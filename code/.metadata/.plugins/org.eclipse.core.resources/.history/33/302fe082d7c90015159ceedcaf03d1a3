@@ -1,0 +1,26 @@
+package controllers;
+
+import org.jongo.marshall.jackson.oid.MongoObjectId;
+
+abstract class Entidad {
+	public Entidad(String id, String nombre){
+		this.id = id;
+		this.nombre = nombre;
+	}
+	
+	@MongoObjectId
+	final private String id;
+	final private String nombre;
+	final private java.time.LocalDate creadoEn = java.time.LocalDate.now();
+	
+	public java.time.LocalDate getCreadoEn() {
+		return creadoEn;
+	}
+	public String getId() {
+		return id;
+	}
+	public String getNombre() {
+		return nombre;
+	}
+	
+}

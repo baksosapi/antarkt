@@ -1,0 +1,14 @@
+package servicios.agente
+import java.util.UUID;
+
+object ProtocoloAgente {
+  case class Hola(val msg:String)
+  case class Anunciar(token:UUID)
+  case class Ack(referencia: String)
+  case class Pong()
+  case class Verify()
+  
+  case class Status()
+  case class StatusReport(wasContacted:Boolean, lastContact:java.util.Optional[java.time.LocalDateTime])
+  
+}

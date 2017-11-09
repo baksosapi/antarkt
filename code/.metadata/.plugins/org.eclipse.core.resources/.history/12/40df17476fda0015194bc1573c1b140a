@@ -1,0 +1,16 @@
+import com.google.inject.AbstractModule;
+import play.libs.akka.AkkaGuiceSupport;
+import servicios.rabbit.SupervisorRabbit;
+import servicios.agente.SupervisorAgente;
+//import servicios.metricas.SupervisorMetricas;
+//import servicios.persistencia.SupervisorPersistencia;
+
+public class Module extends AbstractModule implements AkkaGuiceSupport {
+    @Override
+    protected void configure() {
+        bindActor(SupervisorRabbit.class, "rabbit-service");
+        bindActor(SupervisorAgente.class, "agent-service");
+        //bindActor(SupervisorPersistencia.class, "persistance-service");
+        //bindActor(SupervisorMetrics.class, "metrics-service");
+    }
+}

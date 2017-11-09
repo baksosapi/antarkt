@@ -1,0 +1,6 @@
+package models.entidades;
+
+public class Servicio {
+	private boolean requiereIdentificacion;
+
+}

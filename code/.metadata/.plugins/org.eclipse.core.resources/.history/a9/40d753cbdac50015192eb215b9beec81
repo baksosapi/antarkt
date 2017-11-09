@@ -1,0 +1,62 @@
+package servicios;
+
+import java.util.*;
+import play.libs.F.Promise;
+
+import javax.inject.Singleton;
+
+import org.bson.Document;
+import org.bson.codecs.configuration.*;
+import org.bson.types.ObjectId;
+
+import com.mongodb.ConnectionString;
+import com.mongodb.ServerAddress;
+import com.mongodb.async.client.*;
+import com.mongodb.connection.ClusterSettings;
+import com.typesafe.config.Config;
+import com.typesafe.config.ConfigFactory;
+
+import eu.dozd.mongo.MongoMapper;
+
+import models.entidades.Usuario;
+
+@Singleton
+public class DAOUsuarios implements DAO<Usuario> {
+	
+	Config config = ConfigFactory.load();
+	
+	CodecRegistry codecRegistry = CodecRegistries.fromProviders(MongoMapper.getProviders());
+	ClusterSettings clusterSettings = ClusterSettings.builder().hosts(Arrays.asList(new ServerAddress("localhost", 27017))).build();
+    MongoClientSettings settings = MongoClientSettings.builder().codecRegistry(codecRegistry)
+                                        .clusterSettings(clusterSettings).build();
+
+    MongoClient client = MongoClients.create(settings);
+    client.getDatabase("panel")
+			
+	//public MongoCollection usuariosMongo = db.getCollection("usuarios");
+	//public JacksonDBCollection<Usuario, String> usuarios = JacksonDBCollection.wrap(usuariosMongo, Usuario.class, String.class);
+	
+
+	/*public Promise<Usuario> crear(String nombre) {
+		Usuario u = new Usuario();
+		u.setNombre(nombre);
+		return Promise.promise( () -> usuarios.insert(u)).map( (wr) ->  u );
+	}*/
+
+	@Override
+	public Promise<Usuario> findById(String id) {
+		return Promise.promise(() -> usuarios.findOneById(id) );
+	}
+
+	@Override
+	public Promise<Usuario> findByName(String name) {
+		return Promise.promise(() -> usuarios.findOne( DBQuery.is("name", name) ) );
+	}
+
+	/*@Override
+	public Promise<Usuario> saveSingle(Usuario object) {
+		// TODO Auto-generated method stub
+		return null;
+	}*/
+
+}

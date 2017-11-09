@@ -1,0 +1,17 @@
+package controllers;
+
+import models.entidades.Entidad;
+import play.libs.F.Promise;
+import play.mvc.Result;
+
+abstract class APILectura<T extends Entidad> {
+	
+	public Promise<Result> findById(String id){
+		
+	}
+	
+	public Promise<Result> findByName(String name){
+		
+	}
+	
+}

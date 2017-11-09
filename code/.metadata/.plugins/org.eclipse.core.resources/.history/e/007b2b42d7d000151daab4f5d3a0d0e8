@@ -1,0 +1,9 @@
+package models.mensajes;
+
+import org.immutables.value.Value;
+
+@Value.Immutable
+@Value.Style(typeImmutable = "*")
+public interface Msg {
+	public String value();
+}

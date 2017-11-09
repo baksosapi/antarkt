@@ -1,0 +1,9 @@
+package models.entidades;
+
+import org.immutables.value.Value;
+
+@Value.Immutable
+@GenerarClase
+public interface Aplicacion extends Entidad {
+	public java.util.Set<Entorno> entornos();
+}

@@ -1,0 +1,18 @@
+package servicios.rabbit;
+
+import akka.actor.ActorRef;
+
+public class RabbitProtocol {
+	
+	public static class Connect {
+		public Connect(String queue, ActorRef worker){ this.queueName = queue; this.worker = worker; }
+		public final String queueName;
+		public final ActorRef worker;
+	}
+	
+	public static class Disconnect { }
+	public static class RawMessage {
+		public RawMessage(String )
+	}
+
+}

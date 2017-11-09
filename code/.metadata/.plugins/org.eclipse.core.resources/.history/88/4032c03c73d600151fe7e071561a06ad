@@ -1,0 +1,32 @@
+package servicios.websocket;
+
+import akka.actor.UntypedActor;
+import play.core.actors.WebSocketActor;
+import akka.actor.*;
+
+public class WebsocketActor extends UntypedActor {
+	
+	public static Props props(ActorRef out) {
+        return Props.create(WebSocketActor.class, out);
+    }
+	
+	private final ActorRef out;
+	
+	public WebsocketActor(ActorRef out){
+		this.out = out;
+	}
+
+	@Override
+	public void onReceive(Object msg) throws Exception {
+		if (msg instanceof String) {
+            out.tell("I received your message: " + msg, self() );
+        } else if(msg instanceof JsonNode){
+        	JsonNode json = (JsonNode) msg;
+        	
+        }else {
+        	unhandled(msg);
+        }
+
+	}
+
+}

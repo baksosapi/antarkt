@@ -1,0 +1,80 @@
+package servicios.rabbit;
+
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.module.mrbean.AbstractTypeMaterializer;
+import com.fasterxml.jackson.module.mrbean.MrBeanModule;
+
+import akka.actor.UntypedActor;
+import servicios.rabbit.RabbitProtocol.RawMessage;
+import models.mensajes.Msg;
+import models.mensajes.Bean;
+
+public class RabbitWorker extends UntypedActor {
+	@Override
+	public void onReceive(Object msg) throws Exception {
+		if(msg instanceof RabbitProtocol.RawMessage){
+			RabbitProtocol.RawMessage raw = (RabbitProtocol.RawMessage) msg;
+			convertToJson(raw);
+		} else {
+			unhandled(msg);
+		}
+	}
+
+	private void convertToJson(RawMessage raw) throws Exception {
+		//try {
+			JsonNode node = play.libs.Json.parse(raw.body);
+			getSender().tell( new RabbitProtocol.Ack(raw.tag), getSelf() );
+			System.out.println(" [x] Received '" + node + "'" + " from key " + raw.routingKey);
+	        System.out.println(" Delivery tag: " + raw.tag + " / Consumer Tag " + raw.consumerTag + "\n");
+	        deliver(node, raw.routingKey);
+		//} catch (Exception e){
+			System.out.println( new String(raw.body, "UTF-8") ); // XXX
+			//throw new RabbitProtocol.DecodeException(e, raw.body);
+		//}
+		//Send to destination
+	}
+
+	private void deliver(JsonNode json, String key) throws Exception {
+		
+
+		System.out.println("[JSON]" + json);
+
+		try {
+
+			Msg msg = play.libs.Json.fromJson(json, Msg.class);
+			if(msg == null){
+				System.out.println( "null instead of Msg");	
+			} else {
+				System.out.println(msg.value());
+			}
+		} catch (Exception e){
+			System.out.println("deserializaion failed" );
+			e.printStackTrace();
+
+		}
+		
+		try {
+			
+			ObjectMapper mapper = new ObjectMapper();
+			Environment env = new play.Environment(new play.Environment.simple());
+			mapper.registerModule( new MrBeanModule(new AbstractTypeMaterializer(play.Environment.classLoader() )));
+			play.libs.Json.setObjectMapper(mapper);
+
+			//Bean msg = play.libs.Json.fromJson(json, Bean.class);
+			Bean msg = mapper.readValue(json.toString(), Bean.class);
+			if(msg == null){
+				System.out.println( "null instead of Msg");	
+			} else {
+				System.out.println(msg.getValue());
+			}
+		} catch (Exception e){
+			System.out.println("Mr bean deserializaion failed" );
+			e.printStackTrace();
+
+		}
+
+
+	}
+
+}

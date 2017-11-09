@@ -1,0 +1,63 @@
+package servicios.rabbit;
+
+import javax.inject.Inject;
+import javax.inject.Named;
+
+import akka.actor.ActorRef;
+import akka.actor.Props;
+import akka.actor.UntypedActor;
+import akka.event.Logging;
+import akka.event.LoggingAdapter;
+
+// Fuente de mensajes de todo el sistema
+// TODO Simplificar: Manager 1->1 Connection 1->1 Consumer 1->* Workers
+// TODO Aislar estados (become): Conectado / No conectado
+@Singleton
+public class SupervisorRabbit extends UntypedActor {
+	
+	@Inject @Named("agent-service") ActorRef agentes; 
+	final ActorRef rabbitConnection  = getContext().actorOf(Props.create(RabbitConnection.class), "connection");
+	final LoggingAdapter log = Logging.getLogger(getContext().system(), this);
+	 
+	private final String QUEUE_NAME = "panel";
+
+	/*
+	 private static SupervisorStrategy strategy = new OneForOneStrategy(10, Duration.create("1 minute"),
+   new Function<Throwable, Directive>() {
+     @Override
+     public Directive apply(Throwable t) {
+       if (t instanceof RabbitProtocol.DecodeException) {
+       	 prisma.tell( new PrismaProtocol.TrivialFailure(t, getContext().system() ) )
+         return resume();
+       } else if (t instanceof NullPointerException) {
+         return restart();
+       } else if (t instanceof IllegalArgumentException) {
+         return stop();
+       } else {
+         return escalate();
+       }
+     }
+   });
+
+ @Override
+ public SupervisorStrategy supervisorStrategy() {
+   return strategy;
+  }
+  */
+
+	public void onReceive(Object msg) throws Exception {
+		if(msg instanceof RabbitProtocol.ConnectionSuccess){
+			log.info("[Manager] Connected");
+		} else {
+			unhandled(msg);
+		}
+	}
+	
+	@Override
+	public void preStart(){
+		log.info("[Manager] Starting connection...");
+		rabbitConnection.tell( new RabbitProtocol.Connect(QUEUE_NAME), getSelf() );
+	}
+
+}
+

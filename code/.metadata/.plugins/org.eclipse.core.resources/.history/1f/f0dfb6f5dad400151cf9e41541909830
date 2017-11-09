@@ -1,0 +1,19 @@
+/*package models.entidades;
+
+import java.time.LocalDate;
+import java.util.Optional;
+
+import org.immutables.value.Value;
+
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+
+@Value.Immutable
+@GenerarClase
+@JsonSerialize(as=UsuarioFactory.class)
+@JsonDeserialize(as=UsuarioFactory.class)
+public class Usuario implements Entidad {
+	public final Plan plan;
+	public Usuario(String i, Plan p){ this.id = i; this.plan = p; }
+}
+*/

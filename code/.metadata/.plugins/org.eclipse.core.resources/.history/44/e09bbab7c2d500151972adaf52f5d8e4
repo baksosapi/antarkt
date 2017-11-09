@@ -1,0 +1,11 @@
+package servicios.agente;
+
+import akka.actor.UntypedActor;
+// Coordinador disponible en: getContext().parent()
+public class Agente extends UntypedActor {
+	
+	public void onReceive(Object msg){
+		
+	}
+
+}

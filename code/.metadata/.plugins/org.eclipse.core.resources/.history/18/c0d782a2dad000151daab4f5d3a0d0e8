@@ -1,0 +1,10 @@
+package models.mensajes;
+
+public interface Message {
+	public String referencia();
+	public java.util.Optional<Long> duracion();
+	public String referencia();
+	public Enum estado {
+		COMPLETADO("completado"), ERROR("error");
+	}
+}

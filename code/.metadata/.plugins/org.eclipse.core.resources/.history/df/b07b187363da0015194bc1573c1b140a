@@ -1,0 +1,72 @@
+package servicios.agente;
+
+import java.util.HashMap;
+import java.util.UUID;
+
+import akka.actor.*;
+import servicios.agente.ProtocoloAgente.Anunciar;
+
+import java.util.concurrent.CompletableFuture;
+
+/*
+ * Supervisor debe tener
+ * - un registro de TODOS los agentes que est'an activos
+ * - un registro de los agentes inactivos
+ * - mecanismos para contactar un agente a partir de su token/ID
+ */
+public class SupervisorAgente extends UntypedActor {
+	
+	private HashMap<UUID, ActorRef> agentes = new HashMap<>();
+	
+	//private final java.util.Optional<String> receivedToken;
+	
+	public void onReceive(Object msg){
+		if(msg instanceof ProtocoloAgente.StatusReport){
+			ProtocoloAgente.StatusReport report = (ProtocoloAgente.StatusReport) msg;
+		} else if(msg instanceof ProtocoloAgente.Verify){
+			contactAllChilds();
+		} else if(msg instanceof ProtocoloAgente.Anunciar){
+			ProtocoloAgente.Anunciar a = (ProtocoloAgente.Anunciar) msg;
+			anunciar(a);
+		} else {
+			unhandled(msg);
+		}
+		
+	}
+	
+	// El metodo debe ser compatible tanto con agentes existentes, como con agentes nuevos
+	// Implica un viaje a la BD
+	private void anunciar(Anunciar a) {
+		ActorRef child = getContext().getChild( a.token().toString() );
+		if(child != null){
+			child.tell( new ProtocoloAgente.Hola("saluton"), getSelf() );
+		} else {
+			
+		}
+		
+	}
+
+	/* Registrar agente:
+	 * --> Generar token de Arca / CoordinadorAgentes ! RegistrarToken( UUID token )
+	 * Arca es ejecutado en la m'aquina indicada ¿SSH?
+	 * <-- Agente se anuncia con token entregado / CoordinadorAgentes ! AnunciarAgente( token )  
+	 * --> Crear actor para manejar los mensajes del agente recien creado
+	 */
+	public CompletableFuture<String> registerAgent(){
+		// Generar token
+		UUID token = UUID.randomUUID();
+		// Instalar agente: SSH ! Arca(token, ip)
+		ActorRef child = getContext().actorOf(Props.create(ActorAgente.class), token.toString() ); 
+		agentes.put(token, child);
+		return CompletableFuture.completedFuture("TODO");
+	}
+	
+	public void contactAllChilds(){
+		Iterable<ActorRef> ch = this.getContext().getChildren();
+		ch.forEach( (c) -> c.tell( new ProtocoloAgente.Status(), getSelf() ) );
+	}
+	
+	// retrieve agents
+	// GetAllActiveAgents --> DB --> Coordinador --> ContactarAgentes --> 
+
+}

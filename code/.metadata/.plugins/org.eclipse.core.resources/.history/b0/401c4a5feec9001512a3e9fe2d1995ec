@@ -1,0 +1,21 @@
+package controllers;
+
+import play.libs.F.Promise;
+import play.libs.Json;
+import play.mvc.*;
+import servicios.DAOUsuarios;
+import akka.actor.*;
+import models.entidades.Usuario;
+
+import com.fasterxml.jackson.databind.JsonNode;
+
+import javax.inject.*;
+
+@Singleton
+public class APIUsuarios extends APILectura<Usuario> {
+	
+	@Inject private APIUsuarios(DAOUsuarios usuarios){
+		super(usuarios);
+	}	
+	
+}

@@ -1,0 +1,14 @@
+package controllers;
+
+import servicios.DAOUsuarios;
+import models.entidades.Usuario;
+import javax.inject.*;
+
+@Singleton
+public class APIUsuarios extends APILectura<Usuario> {
+	
+	private APIUsuarios(){
+		this.setDao( new DAOUsuarios() );
+	}	
+	
+}

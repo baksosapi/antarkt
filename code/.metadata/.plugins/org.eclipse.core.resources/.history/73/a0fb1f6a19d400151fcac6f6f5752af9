@@ -1,0 +1,9 @@
+package models.entidades;
+
+import java.time.LocalDate;
+
+public abstract class Entorno implements Entidad {
+	
+	public abstract java.util.List<Servicio> servicios();
+
+}

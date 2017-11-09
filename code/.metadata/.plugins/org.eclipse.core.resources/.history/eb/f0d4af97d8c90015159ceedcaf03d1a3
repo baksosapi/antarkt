@@ -1,0 +1,11 @@
+package models.entidades;
+
+public class Entorno extends Entidad {
+	private java.util.List<Servicio> servicios;
+	//cocinado
+	
+	void me(){
+		this.nombre = "233";
+	}
+
+}

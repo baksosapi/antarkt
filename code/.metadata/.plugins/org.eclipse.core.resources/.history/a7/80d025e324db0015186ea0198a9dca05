@@ -1,0 +1,6 @@
+package servicios;
+
+// Scala value class
+public class RoutingKey extends String {
+
+}

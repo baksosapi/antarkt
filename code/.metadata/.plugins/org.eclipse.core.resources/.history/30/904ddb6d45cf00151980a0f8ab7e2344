@@ -1,0 +1,12 @@
+package servicios.rabbit;
+
+public class RabbitProtocol {
+	
+	public static class Connect {
+		public Connect(String queue){ this.queueName = queue; }
+		public final String queueName;
+	}
+	
+	public static class Disconnect { }
+
+}

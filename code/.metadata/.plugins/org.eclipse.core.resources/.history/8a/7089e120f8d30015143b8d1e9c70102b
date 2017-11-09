@@ -1,0 +1,21 @@
+package controllers;
+
+import java.util.concurrent.CompletableFuture;
+
+import models.entidades.Usuario;
+import play.libs.Json;
+import play.mvc.*;
+import servicios.dao.DAOUsuarios;
+
+public class APIUsuarios extends APILectura<Usuario> {
+	
+	public APIUsuarios(){
+		this.setDao( new DAOUsuarios() );
+	}	
+	
+	public CompletableFuture<Result> insert(String name){
+		CompletableFuture<Usuario> result = this.dao.insert(name);
+		return result.map( (Usuario u) -> Results.ok( Json.toJson(u) ) );
+	}
+	
+}

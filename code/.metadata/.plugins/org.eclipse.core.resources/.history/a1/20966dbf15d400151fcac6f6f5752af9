@@ -1,0 +1,10 @@
+package models.entidades;
+
+import org.immutables.value.Value;
+
+@Value.Immutable
+abstract class AbstractUsuario extends Entidad {
+	
+	public abstract Plan getPlan();
+	
+}

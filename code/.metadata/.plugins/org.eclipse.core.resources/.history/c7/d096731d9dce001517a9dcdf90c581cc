@@ -1,0 +1,8 @@
+package servicios;
+
+public class RabbitConnection extends UntypedActor {
+	public function onReceive(Object msg){
+		
+	}
+
+}

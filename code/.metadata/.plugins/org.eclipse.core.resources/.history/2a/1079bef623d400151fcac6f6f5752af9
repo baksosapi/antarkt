@@ -1,0 +1,15 @@
+package servicios.dao;
+
+import javax.inject.Singleton;
+
+import models.entidades.*;
+
+@Singleton
+public class DAOUsuarios extends DAO<Usuario> {
+	
+	public DAOUsuarios(){
+		super("usuarios", Usuario.class);
+		//Usuario u = UsuarioFactory.builder().setNombre("Mark").setId("Twain").build(); //.builder().setNombre("mark").setId("ER%NHSHYS&S").setPlan(new Plan()).build();
+	}
+
+}

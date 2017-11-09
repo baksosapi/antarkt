@@ -1,0 +1,19 @@
+package servicios.rabbit;
+import akka.actor.Props;
+import akka.actor.UntypedActor;
+
+public class RabbitChannel extends UntypedActor {
+	
+	ActorRef worker = getContext().actorOf(Props.create(RabbitWorker, "worker"));
+	
+	@Override
+	public void onReceive(Object arg0) throws Exception {
+		if(msg instanceof RabbitProtocol.CreateChannel){
+			RabbitProtocol.CreateChannel c = (RabbitProtocol.CreateChannel) msg;
+			
+		} else {
+			unhandled(msg);
+		}
+	}
+
+}

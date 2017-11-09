@@ -1,0 +1,12 @@
+package models.entidades;
+
+import org.immutables.value.Value;
+
+@Value.Style(
+    get = {"is*", "get*"}, // Detect 'get' and 'is' prefixes in accessor methods
+    init = "set*", // Builder initialization methods will have 'set' prefix
+    typeAbstract = {"Abstract*"}, // 'Abstract' prefix will be detected and trimmed
+    typeImmutable = "*Factory", // No prefix or suffix for generated immutable type
+    defaults = @Value.Immutable(copy = false)) // Disable copy methods by default
+@Some
+public @interface GenerarClase {}

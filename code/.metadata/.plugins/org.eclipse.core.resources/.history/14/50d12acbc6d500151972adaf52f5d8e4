@@ -1,0 +1,12 @@
+package servicios.agente
+
+object ProtocoloAgente {
+  case class Hola(val msg:String)
+  case class Anunciar(token:String)
+  case class Ack(referencia: String)
+  case class Pong()
+  
+  case class Status()
+  case class StatusReport(wasContacted:Boolean, lastContact:java.time.LocalDateTime)
+  
+}

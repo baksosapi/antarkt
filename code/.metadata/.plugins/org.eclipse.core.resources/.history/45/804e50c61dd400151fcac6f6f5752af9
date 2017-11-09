@@ -1,0 +1,334 @@
+package models.entidades;
+
+import com.google.common.base.MoreObjects;
+import com.google.common.base.Preconditions;
+import com.google.common.collect.Lists;
+import java.time.LocalDate;
+import java.util.List;
+import javax.annotation.Generated;
+import javax.annotation.Nullable;
+import javax.annotation.ParametersAreNonnullByDefault;
+import javax.annotation.concurrent.Immutable;
+import javax.annotation.concurrent.NotThreadSafe;
+
+/**
+ * Immutable implementation of {@link Usuario}.
+ * <p>
+ * Use the builder to create immutable instances:
+ * {@code ImmutableUsuario.builder()}.
+ */
+@SuppressWarnings("all")
+@ParametersAreNonnullByDefault
+@Generated({"Immutables.generator", "Usuario"})
+@Immutable
+public final class ImmutableUsuario extends Usuario {
+  private final Plan plan;
+  private final LocalDate creadoEn;
+  private final String id;
+  private final String nombre;
+
+  private ImmutableUsuario(
+      Plan plan,
+      LocalDate creadoEn,
+      String id,
+      String nombre) {
+    this.plan = plan;
+    this.creadoEn = creadoEn;
+    this.id = id;
+    this.nombre = nombre;
+  }
+
+  /**
+   * @return The value of the {@code plan} attribute
+   */
+  @Override
+  public Plan getPlan() {
+    return plan;
+  }
+
+  /**
+   * @return The value of the {@code creadoEn} attribute
+   */
+  @Override
+  public LocalDate getCreadoEn() {
+    return creadoEn;
+  }
+
+  /**
+   * @return The value of the {@code id} attribute
+   */
+  @Override
+  public String getId() {
+    return id;
+  }
+
+  /**
+   * @return The value of the {@code nombre} attribute
+   */
+  @Override
+  public String getNombre() {
+    return nombre;
+  }
+
+  /**
+   * Copy the current immutable object by setting a value for the {@link Usuario#getPlan() plan} attribute.
+   * A shallow reference equality check is used to prevent copying of the same value by returning {@code this}.
+   * @param value A new value for plan
+   * @return A modified copy of the {@code this} object
+   */
+  public final ImmutableUsuario withPlan(Plan value) {
+    if (this.plan == value) return this;
+    Plan newValue = Preconditions.checkNotNull(value, "plan");
+    return new ImmutableUsuario(newValue, this.creadoEn, this.id, this.nombre);
+  }
+
+  /**
+   * Copy the current immutable object by setting a value for the {@link Usuario#getCreadoEn() creadoEn} attribute.
+   * A shallow reference equality check is used to prevent copying of the same value by returning {@code this}.
+   * @param value A new value for creadoEn
+   * @return A modified copy of the {@code this} object
+   */
+  public final ImmutableUsuario withCreadoEn(LocalDate value) {
+    if (this.creadoEn == value) return this;
+    LocalDate newValue = Preconditions.checkNotNull(value, "creadoEn");
+    return new ImmutableUsuario(this.plan, newValue, this.id, this.nombre);
+  }
+
+  /**
+   * Copy the current immutable object by setting a value for the {@link Usuario#getId() id} attribute.
+   * A shallow reference equality check is used to prevent copying of the same value by returning {@code this}.
+   * @param value A new value for id
+   * @return A modified copy of the {@code this} object
+   */
+  public final ImmutableUsuario withId(String value) {
+    if (this.id == value) return this;
+    String newValue = Preconditions.checkNotNull(value, "id");
+    return new ImmutableUsuario(this.plan, this.creadoEn, newValue, this.nombre);
+  }
+
+  /**
+   * Copy the current immutable object by setting a value for the {@link Usuario#getNombre() nombre} attribute.
+   * A shallow reference equality check is used to prevent copying of the same value by returning {@code this}.
+   * @param value A new value for nombre
+   * @return A modified copy of the {@code this} object
+   */
+  public final ImmutableUsuario withNombre(String value) {
+    if (this.nombre == value) return this;
+    String newValue = Preconditions.checkNotNull(value, "nombre");
+    return new ImmutableUsuario(this.plan, this.creadoEn, this.id, newValue);
+  }
+
+  /**
+   * This instance is equal to all instances of {@code ImmutableUsuario} that have equal attribute values.
+   * @return {@code true} if {@code this} is equal to {@code another} instance
+   */
+  @Override
+  public boolean equals(@Nullable Object another) {
+    if (this == another) return true;
+    return another instanceof ImmutableUsuario
+        && equalTo((ImmutableUsuario) another);
+  }
+
+  private boolean equalTo(ImmutableUsuario another) {
+    return plan.equals(another.plan)
+        && creadoEn.equals(another.creadoEn)
+        && id.equals(another.id)
+        && nombre.equals(another.nombre);
+  }
+
+  /**
+   * Computes a hash code from attributes: {@code plan}, {@code creadoEn}, {@code id}, {@code nombre}.
+   * @return hashCode value
+   */
+  @Override
+  public int hashCode() {
+    int h = 31;
+    h = h * 17 + plan.hashCode();
+    h = h * 17 + creadoEn.hashCode();
+    h = h * 17 + id.hashCode();
+    h = h * 17 + nombre.hashCode();
+    return h;
+  }
+
+  /**
+   * Prints the immutable value {@code Usuario...} with all non-generated
+   * and non-auxiliary attribute values.
+   * @return A string representation of the value
+   */
+  @Override
+  public String toString() {
+    return MoreObjects.toStringHelper("Usuario")
+        .add("plan", plan)
+        .add("creadoEn", creadoEn)
+        .add("id", id)
+        .add("nombre", nombre)
+        .toString();
+  }
+
+  /**
+   * Creates an immutable copy of a {@link Usuario} value.
+   * Uses accessors to get values to initialize the new immutable instance.
+   * If an instance is already immutable, it is returned as is.
+   * @param instance The instance to copy
+   * @return A copied immutable Usuario instance
+   */
+  public static ImmutableUsuario copyOf(Usuario instance) {
+    if (instance instanceof ImmutableUsuario) {
+      return (ImmutableUsuario) instance;
+    }
+    return ImmutableUsuario.builder()
+        .from(instance)
+        .build();
+  }
+
+  /**
+   * Creates a builder for {@link ImmutableUsuario ImmutableUsuario}.
+   * @return A new ImmutableUsuario builder
+   */
+  public static ImmutableUsuario.Builder builder() {
+    return new ImmutableUsuario.Builder();
+  }
+
+  /**
+   * Builds instances of type {@link ImmutableUsuario ImmutableUsuario}.
+   * Initialize attributes and then invoke the {@link #build()} method to create an
+   * immutable instance.
+   * <p><em>{@code Builder} is not thread-safe and generally should not be stored in a field or collection,
+   * but instead used immediately to create instances.</em>
+   */
+  @NotThreadSafe
+  public static final class Builder {
+    private static final long INIT_BIT_PLAN = 0x1L;
+    private static final long INIT_BIT_CREADO_EN = 0x2L;
+    private static final long INIT_BIT_ID = 0x4L;
+    private static final long INIT_BIT_NOMBRE = 0x8L;
+    private long initBits = 0xf;
+
+    private @Nullable Plan plan;
+    private @Nullable LocalDate creadoEn;
+    private @Nullable String id;
+    private @Nullable String nombre;
+
+    private Builder() {
+    }
+
+    /**
+     * Fill a builder with attribute values from the provided {@code models.entidades.Entidad} instance.
+     * @param instance The instance from which to copy values
+     * @return {@code this} builder for use in a chained invocation
+     */
+    public final Builder from(Entidad instance) {
+      Preconditions.checkNotNull(instance, "instance");
+      from((Object) instance);
+      return this;
+    }
+
+    /**
+     * Fill a builder with attribute values from the provided {@code models.entidades.Usuario} instance.
+     * @param instance The instance from which to copy values
+     * @return {@code this} builder for use in a chained invocation
+     */
+    public final Builder from(Usuario instance) {
+      Preconditions.checkNotNull(instance, "instance");
+      from((Object) instance);
+      return this;
+    }
+
+    private void from(Object object) {
+      if (object instanceof Entidad) {
+        Entidad instance = (Entidad) object;
+        creadoEn(instance.getCreadoEn());
+        nombre(instance.getNombre());
+        id(instance.getId());
+      }
+      if (object instanceof Usuario) {
+        Usuario instance = (Usuario) object;
+        plan(instance.getPlan());
+      }
+    }
+
+    /**
+     * Initializes the value for the {@link Usuario#getPlan() plan} attribute.
+     * @param plan The value for plan 
+     * @return {@code this} builder for use in a chained invocation
+     */
+    public final Builder plan(Plan plan) {
+      this.plan = Preconditions.checkNotNull(plan, "plan");
+      initBits &= ~INIT_BIT_PLAN;
+      return this;
+    }
+
+    /**
+     * Initializes the value for the {@link Usuario#getCreadoEn() creadoEn} attribute.
+     * @param creadoEn The value for creadoEn 
+     * @return {@code this} builder for use in a chained invocation
+     */
+    public final Builder creadoEn(LocalDate creadoEn) {
+      this.creadoEn = Preconditions.checkNotNull(creadoEn, "creadoEn");
+      initBits &= ~INIT_BIT_CREADO_EN;
+      return this;
+    }
+
+    /**
+     * Initializes the value for the {@link Usuario#getId() id} attribute.
+     * @param id The value for id 
+     * @return {@code this} builder for use in a chained invocation
+     */
+    public final Builder id(String id) {
+      this.id = Preconditions.checkNotNull(id, "id");
+      initBits &= ~INIT_BIT_ID;
+      return this;
+    }
+
+    /**
+     * Initializes the value for the {@link Usuario#getNombre() nombre} attribute.
+     * @param nombre The value for nombre 
+     * @return {@code this} builder for use in a chained invocation
+     */
+    public final Builder nombre(String nombre) {
+      this.nombre = Preconditions.checkNotNull(nombre, "nombre");
+      initBits &= ~INIT_BIT_NOMBRE;
+      return this;
+    }
+
+    /**
+     * Builds a new {@link ImmutableUsuario ImmutableUsuario}.
+     * @return An immutable instance of Usuario
+     * @throws java.lang.IllegalStateException if any required attributes are missing
+     */
+    public ImmutableUsuario build() throws IllegalStateException {
+      checkRequiredAttributes();
+      return new ImmutableUsuario(plan, creadoEn, id, nombre);
+    }
+
+    private boolean planIsSet() {
+      return (initBits & INIT_BIT_PLAN) == 0;
+    }
+
+    private boolean creadoEnIsSet() {
+      return (initBits & INIT_BIT_CREADO_EN) == 0;
+    }
+
+    private boolean idIsSet() {
+      return (initBits & INIT_BIT_ID) == 0;
+    }
+
+    private boolean nombreIsSet() {
+      return (initBits & INIT_BIT_NOMBRE) == 0;
+    }
+
+    private void checkRequiredAttributes() throws IllegalStateException {
+      if (initBits != 0) {
+        throw new IllegalStateException(formatRequiredAttributesMessage());
+      }
+    }
+    private String formatRequiredAttributesMessage() {
+      List<String> attributes = Lists.newArrayList();
+      if (!planIsSet()) attributes.add("plan");
+      if (!creadoEnIsSet()) attributes.add("creadoEn");
+      if (!idIsSet()) attributes.add("id");
+      if (!nombreIsSet()) attributes.add("nombre");
+      return "Cannot build Usuario, some of required attributes are not set " + attributes;
+    }
+  }
+}

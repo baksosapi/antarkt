@@ -1,0 +1,7 @@
+package models.mensajes;
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+
+public interface Bean {
+	public String value();
+}

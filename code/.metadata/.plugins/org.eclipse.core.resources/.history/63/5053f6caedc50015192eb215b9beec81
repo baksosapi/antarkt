@@ -1,0 +1,20 @@
+package models.entidades;
+
+import java.time.LocalDate;
+
+@Entity
+public class Plan {
+	public java.time.LocalDate inicio;
+	public TipoDePlan plan;
+	
+	public Plan(){
+		this.plan = TipoDePlan.Gratuito;
+		this.inicio = LocalDate.now();
+	}
+	
+	
+	public enum TipoDePlan {
+		Gratuito, Tier1, Tier2, Tier3, Custom
+	}
+
+}

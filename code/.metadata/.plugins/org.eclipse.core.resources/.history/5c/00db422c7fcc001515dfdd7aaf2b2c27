@@ -1,0 +1,10 @@
+package servicios;
+import akka.actor.*;
+
+public class SupervisorAgente extends UntypedActor {
+	
+	public void onReceive(Object msg){
+		
+	}
+
+}

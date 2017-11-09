@@ -1,0 +1,103 @@
+package servicios;
+
+import java.io.*;
+import java.security.KeyStore;
+import java.util.List;
+
+import javax.net.ssl.*;
+
+import com.rabbitmq.client.*;
+import com.rabbitmq.client.Address;
+import com.typesafe.config.Config;
+
+import play.libs.Json;
+import akka.actor.*;
+import akka.japi.*;
+
+
+public class RabbitConnection extends UntypedActor {
+	
+	private Channel channel;
+	private Connection connection;
+	private Config config;
+	private Channel[] channels;
+	
+	public void onReceive(Object msg){
+		if(msg instanceof RabbitProtocol.Connect){
+			RabbitProtocol.Connect c = (RabbitProtocol.Connect) msg;
+		} else if(msg instanceof RabbitProtocol.Disconnect){
+			RabbitProtocol.Disconnect d = (RabbitProtocol.Disconnect) msg;
+		}
+	}
+	
+	@Override
+	public void postStop() throws Exception {
+		closeAll();
+	}
+	
+	  Procedure<Object> stateConnected = new Procedure<Object>() {
+		    @Override
+		    public void apply(Object message) {
+		      if ( message.equals("bar") ) {
+		        getSender().tell("I am already happy :-)", getSelf());
+		      } else if ( message.equals("foo") ) {
+		        getContext().become(angry);
+		      }
+		    }
+		  };
+	
+	public void stateDisconnected(){ }
+	
+	//
+	public void connect() throws Exception {
+		ConnectionFactory factory = new ConnectionFactory();
+	    char[] keyPassPhrase = "secret".toCharArray();
+	    
+	    // Leer configuración para Rabbit desde application.conf 
+		config = ConfigFactory.load();
+		List<String> clusterAddresses = config.getStringList("rabbit.cluster");
+		int clusterPort = config.getInt("rabbit.port");
+		
+		// Si no están definidos los nodos, la conexión no va a suceder
+		assert clusterAddresses.size() == 3 : "Se requieren 3 IPs de nodos bajo la llave 'rabbit.cluster' exponiendo el mismo puerto en la configuración para enlazar al cluster. ";
+		
+        // Certificados SSL
+        KeyStore tks = KeyStore.getInstance("JKS");
+        tks.load(new FileInputStream( config.getString("rabbit.certificates.path") ), keyPassPhrase);            
+        TrustManagerFactory tmf = TrustManagerFactory.getInstance("SunX509");
+        tmf.init(tks);
+        SSLContext c = SSLContext.getInstance( "TLS" );
+        c.init(null, tmf.getTrustManagers(), null);
+
+        factory.setUsername( "santos" );
+        factory.setPassword( "rhino.metal.acid.cover" );
+	    factory.useSslProtocol(c);
+	    Address[] cluster = { new Address(clusterAddresses.get(0), clusterPort), new Address(clusterAddresses.get(1), clusterPort), new Address(clusterAddresses.get(2), clusterPort)};
+	    
+	    connection = factory.newConnection( cluster ); // XXX: Bloquea
+	    
+	    
+	    
+	    channel.queueDeclarePassive( QUEUE_NAME );
+	    Consumer consumer = new DefaultConsumer(channel) {
+		      @Override
+		      public void handleDelivery(String consumerTag, Envelope envelope, AMQP.BasicProperties properties, byte[] body)
+		          throws IOException {
+		        String message = new String(body, UTF8);
+		        System.out.println(" [x] Received '" + message + "'" + "from key " + envelope.getRoutingKey() + " as JSON \n" + Json.parse(message) + "\n");		        
+		      
+		      }
+	    };
+	    channel.basicConsume(QUEUE_NAME, false, consumer);
+	}
+	
+	private void createChannel(int channelNumber){
+		Channel channel = connection.createChannel();
+	}
+	
+	private void closeAll() throws Exception {
+		channel.close();
+		connection.close();
+	}
+
+}

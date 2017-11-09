@@ -1,0 +1,32 @@
+package models.entidades;
+
+import java.time.LocalDate;
+import java.util.Optional;
+
+import org.immutables.value.Value;
+
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+
+public class Usuario implements Entidad {
+	public final Plan plan;
+	public final String nombre;
+	public final LocalDate creacion;
+	public final String id;
+	public Usuario(String i, String n, LocalDate c, Plan p){ this.id = i; this.nombre = n; this.creacion = c; this.plan = p; }
+	@Override
+	public String getId() {
+		// TODO Auto-generated method stub
+		this.id;
+	}
+	@Override
+	public String getNombre() {
+		// TODO Auto-generated method stub
+		return this.nombre;
+	}
+	@Override
+	public LocalDate getCreacion() {
+		// TODO Auto-generated method stub
+		return this.creacion;
+	}
+}

@@ -1,0 +1,5 @@
+package models.mensajes;
+
+public interface Message {
+
+}

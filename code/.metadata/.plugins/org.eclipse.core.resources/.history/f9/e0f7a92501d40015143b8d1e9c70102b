@@ -1,0 +1,80 @@
+package servicios.dao;
+
+import java.util.concurrent.CompletableFuture;
+
+//import play.libs.F;
+
+import org.bson.types.ObjectId;
+import org.jongo.MongoCollection;
+
+import com.typesafe.config.Config;
+import com.typesafe.config.ConfigFactory;
+
+import models.entidades.Usuario;
+
+public class DAOUsuarios extends DAO<Usuario> {
+	
+	//Config config;
+	Mongo mongo;
+	MongoCollection usuarios;
+	
+	public DAOUsuarios() {
+		this.mongo = new Mongo();
+		this.usuarios = mongo.getCollection("usuarios");
+		this.config = ConfigFactory.load();
+	}
+
+	@Override
+	public CompletableFuture<Usuario> findById(String id) {
+		CompletableFuture<Usuario> u = usuarios.findOne(new ObjectId(id)).as(Usuario.class);
+		
+		if(u != null){
+			return CompletableFuture.completedFuture(u);
+		} else {
+			return ().completeExceptionally( new Throwable("Not such id") );
+		}
+	}
+	
+	@Override
+	public Usuario findByIdSync(String id) {
+		Usuario u = usuarios.findOne(new ObjectId(id)).as(Usuario.class);
+		if(u != null){
+			return u;
+		} else {
+			return null;
+		}
+	}
+
+	@Override
+	public F.Promise<Usuario> findByName(String name) {
+		Usuario u = usuarios.findOne("{name: #}", name).as(Usuario.class); //block
+		if(u != null){
+			return Promise.pure(u);
+		} else {
+			return Promise.throwing(new Throwable("Not such name"));
+		}
+	}
+	
+	public F.Promise<Usuario> insert(String name) {
+		Usuario u = new Usuario();
+		if( true == usuarios.save(u).wasAcknowledged() ){ //block
+			return Promise.pure(u);
+		} else {
+			return Promise.throwing(new Throwable("Not saved"));
+		}
+		
+	}
+
+	@Override
+	public CompletableFuture<Usuario> findByName(String name) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public CompletableFuture<Usuario> insert(String g) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+}

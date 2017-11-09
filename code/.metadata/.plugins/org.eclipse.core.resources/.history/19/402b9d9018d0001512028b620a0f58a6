@@ -1,0 +1,46 @@
+package servicios.rabbit;
+
+public class RabbitProtocol {
+	public static class AckException extends Exception {
+		private static final long serialVersionUID = 1L;
+	}
+	public static class DecodeException extends Exception {
+		private static final long serialVersionUID = 1L;
+		private final byte[] body;
+		private final Throwable t;
+		public DecodeException(Throwable t, byte[] body){
+			this.body = body;
+			this.t = t;
+			
+		}
+	}
+
+	//Connection
+	public static class Connect {
+		public Connect(String queue){ this.queueName = queue; }
+		public final String queueName;
+	}
+	
+	public static class Disconnect { }
+	public static class ConnectionSuccess {}
+	public static class ChannelSuccess {}
+	
+	// Messaging
+	public static class RawMessage {
+		public final long tag;
+		public final String routingKey;
+		public final byte[] body;
+		public final String consumerTag;
+		public RawMessage(long tag, String routingKey, String consumerTag, byte[] body){
+			this.tag = tag;
+			this.routingKey = routingKey;
+			this.body = body;
+			this.consumerTag = consumerTag;
+		}
+	}
+	
+	public static class Ack {
+		public long tag;
+		public Ack(long tag){ this.tag = tag; }
+	}
+}

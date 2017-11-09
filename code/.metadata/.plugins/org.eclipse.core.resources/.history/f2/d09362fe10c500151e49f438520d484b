@@ -1,0 +1,13 @@
+package servicios;
+
+import akka.actor.Props;
+import servicios.Coordinador;
+
+public class Prisma {
+	public static Props props = Props.create(Coordinador.class);
+	
+	public void onReceive(Object msg) throws Exception {
+		System.out.println( msg.toString() );
+	}
+
+}

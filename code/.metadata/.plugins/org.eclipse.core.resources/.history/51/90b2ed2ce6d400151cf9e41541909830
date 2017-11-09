@@ -1,0 +1,37 @@
+package models.entidades
+import java.time.LocalDate;
+import org.bson.types.ObjectId;
+import org.jongo.marshall.jackson.oid.MongoObjectId;
+
+trait Entidad {
+  def getId:String
+  def getNombre:String
+  def getCreacion:LocalDate
+}
+
+case class Plan(){
+  @JsonProperty("inicio") val inicio:LocalDate = LocalDate.now()
+  @JsonProperty("tipo") val tipo:TipoDePlan = TipoDePlan.Gratuito
+}
+
+/*case class Usuario (
+    @MongoId val id:String,
+    val nombre:String,
+    val creacion:LocalDate,
+    val plan:Plan = new Plan()
+) extends Entidad {
+    def getCreacion: java.time.LocalDate = this.creacion
+    def getId: String = this.id
+    def getNombre: String = this.nombre
+}*/
+
+case class Maquina (
+    @MongoObjectId val id:String,
+    val nombre:String,
+    val creacion:LocalDate,
+    val ip:String
+) extends Entidad {
+    def getCreacion: java.time.LocalDate = this.creacion
+    def getId: String = this.id
+    def getNombre: String = this.nombre
+}

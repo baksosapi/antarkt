@@ -1,0 +1,12 @@
+package models.entidades;
+
+import java.time.LocalDate;
+
+import org.immutables.value.Value;
+
+@Value.Immutable
+public abstract class AbstractUsuario implements Entidad {
+	
+	public abstract Plan getPlan();
+	
+}

@@ -1,0 +1,6 @@
+package models.mensajes;
+
+public interface Message {
+	public String referencia();
+	public Optional<long> ejecucion;
+}

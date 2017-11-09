@@ -1,0 +1,15 @@
+package models.entidades;
+
+public class Aplicacion {
+	private String nombre;
+	private java.util.Set<Entorno> entornos;|
+
+	public String getNombre() {
+		return nombre;
+	}
+
+	public void setNombre(String nombre) {
+		this.nombre = nombre;
+	}
+
+}

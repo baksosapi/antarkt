@@ -1,0 +1,35 @@
+package servicios.websocket;
+
+import akka.actor.UntypedActor;
+import play.libs.Json;
+
+import com.fasterxml.jackson.databind.JsonNode;
+
+import akka.actor.*;
+
+public class MyWebsocketActor extends UntypedActor {
+	
+	private final ActorRef out;
+	
+	public static Props props(ActorRef out) {
+        return Props.create(MyWebsocketActor.class, out);
+    }
+
+	public MyWebsocketActor(ActorRef out){
+		this.out = out;
+	}
+
+	@Override
+	public void onReceive(Object msg) throws Exception {
+		if (msg instanceof String) {
+            out.tell("I received your message: " + msg, self() );
+        } else if(msg instanceof JsonNode) {
+        	JsonNode json = (JsonNode) msg;
+        	out.tell( Json.parse("{\"msg\" : \"I received" + json.get("msg").asText().toString() + "\"} " ), getSelf() );
+        }else {
+        	unhandled(msg);
+        }
+
+	}
+
+}

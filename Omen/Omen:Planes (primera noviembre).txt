@@ -1,0 +1,21 @@
+====== Planes ======
+Created miércoles 04 noviembre 2015
+
+===== Noviembre primera =====
+* Diseñador: diseño estándar/genérico/modular [1mes]
+* Maquetear: [1semana] + responsive
+* Metáforas: ideas conceptuales para elementos
+* UX: Sencillo + info extra (barras de progreso / considerar segundos usos, información irrelevante a posterior)
+* Elementos comunes entre apps ← pensar en escalado institucional
+* cPanel dominio como elemento central ← **lenguaje no técnico **(página/app; server/machine)
+* Clústers (red)
+* <> al usuario acerca de los usos del clúster (posibilidades, para qué es mejor)
+* Reglas sobre máquinas (roles)
+* Test conectividad
+* Escalabilidad del clúster
+* Mediciones de apps en cluster
+
+* Clúster (noviembre-diciembre)
+* Firewalls (iptables límites por ip, mod_security)
+* Diseño (enero-febrero)
+* Políticas (monitoreo)

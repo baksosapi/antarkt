@@ -1,0 +1,58 @@
+package servicios;
+
+import java.util.*;
+
+import play.libs.F;
+
+import javax.inject.Inject;
+import javax.inject.Singleton;
+
+import com.mongodb.DBCollection;
+import com.mongodb.client.MongoCollection;
+import com.typesafe.config.Config;
+import com.typesafe.config.ConfigFactory;
+
+import models.entidades.Usuario;
+
+@Singleton
+public class DAOUsuarios implements DAO<Usuario> {
+	
+	Config config = ConfigFactory.load();
+	@Inject Mongo mongo;
+	
+	public DAOUsuarios() {
+	}
+
+	@Override
+	public F.Promise<Usuario> findById(String id) {
+		F.RedeemablePromise<Usuario> promise = F.RedeemablePromise.empty();
+		
+		mongo.getDatastore().createQuery(Usuario.class).getCollection().findOne(id, projection).get()
+		
+		coll.findOne( new ObjectId(id)).;
+		
+		System.out.println("derefing completion");
+		return promise;
+
+	}
+
+	@Override
+	public F.Promise<Usuario> findByName(String name) {
+		F.RedeemablePromise<Usuario> promise = F.RedeemablePromise.empty();
+		System.out.println("derefing completion");
+		return promise;
+	}
+	
+	public F.Promise<Usuario> insert(String name) {
+		F.RedeemablePromise<Usuario> promise = F.RedeemablePromise.empty();
+		System.out.println("derefing completion");
+		return promise;
+	}
+
+	/*@Override
+	public Promise<Usuario> saveSingle(Usuario object) {
+		// TODO Auto-generated method stub
+		return null;
+	}*/
+
+}

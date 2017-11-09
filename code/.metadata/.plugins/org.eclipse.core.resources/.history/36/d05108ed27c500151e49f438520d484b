@@ -1,0 +1,30 @@
+package controllers;
+
+import play.libs.F.Promise;
+import play.mvc.*;
+import servicios.DAOUsuarios;
+import akka.actor.*;
+import models.entidades.Usuario;
+
+import org.bson.types.ObjectId;
+import javax.inject.*;
+
+@Singleton
+public class APIAgente extends Controller {
+	
+	//private ActorRef prisma;
+	//private ActorRef mongo;
+
+	@Inject public APIAgente(ActorSystem system, DAOUsuarios usuarios){
+		//prisma = system.actorOf(Props.create(servicios.Prisma.class), "prisma");
+		//mongo = system.actorOf(Props.create(servicios.Mongo.class), "mongo");
+	}
+	
+	public Promise<Result> findById(String id){
+		Promise<Usuario> aa = usuarios.findById(new ObjectId(id));
+		return aa.map( (Usuario u) -> Results.ok(u.getNombre() ) );
+	}
+	
+	
+	
+}

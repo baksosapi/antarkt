@@ -1,0 +1,31 @@
+package controllers;
+
+import play.libs.F.Promise;
+import play.mvc.*;
+import scala.concurrent.Future;
+import servicios.DAOUsuarios;
+import akka.actor.*;
+import models.Entidades.Usuario;
+
+import javax.inject.*;
+
+@Singleton
+public class APIAgente extends Controller{
+	
+	private ActorRef prisma;
+	private ActorRef mongo;
+
+	@Inject public APIAgente(ActorSystem system){
+		prisma = system.actorOf(Props.create(servicios.Prisma.class), "prisma");
+		mongo = system.actorOf(Props.create(servicios.Mongo.class), "mongo");
+	}
+	
+	public Promise<Result> listar(String filter, short limit, short pagina){
+		Promise<Usuario> aa = DAOUsuarios.findById("345");
+		aa.map((Usuario u) -> Results.ok(u.toString())
+		return Results.TODO;
+	}
+	
+	
+	
+}

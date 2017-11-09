@@ -1,0 +1,6 @@
+package servicios;
+import akka.actor.*;
+
+public class SupervisorAgente extends UntypedActor {
+
+}

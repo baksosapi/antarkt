@@ -1,0 +1,82 @@
+package servicios;
+
+import java.util.Optional;
+import java.util.UUID;
+
+// Scala value class
+
+/*
+ * Routing keys
+ * <organization>.<component>.<entity>.#
+ * <organization>.<component>.<entity>.<UUID>.<accion>
+ */
+public class RoutingKey {
+	public final Optional<UUID> uuid;
+	public final String organizacion;
+	public final String componente;
+	public final String entidad;
+	public final Optional<String> accion;
+	public final boolean isBroadcast;
+	
+	private RoutingKey(String org, String comp, String ent){
+		this.organizacion = org;
+		this.componente = comp;
+		this.entidad = ent;
+		this.uuid = Optional.empty();
+		this.isBroadcast = true;
+		this.accion = Optional.empty();
+	}
+	
+	private RoutingKey(String org, String comp, String ent, UUID dest){
+		this.organizacion = org;
+		this.componente = comp;
+		this.entidad = ent;
+		this.uuid = Optional.of( dest );
+		this.isBroadcast = false;
+		this.accion = Optional.empty();
+	}
+	
+	private RoutingKey(String org, String comp, String ent, UUID dest, String acc){
+		this.organizacion = org;
+		this.componente = comp;
+		this.entidad = ent;
+		this.uuid = Optional.of( dest );
+		this.isBroadcast = false;
+		this.accion = Optional.of( acc );
+	}
+	
+	
+	static Optional<RoutingKey> fromString(String str){
+		String[] raw = str.split(".");
+		//UUID
+		if( raw[3].matches("[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[34][0-9a-fA-F]{3}-[89ab][0-9a-fA-F]{3}-[0-9a-fA-F]{12}") ){
+			return null;
+		} else if(1) {
+			return null;
+		} else {
+			return null;
+		}
+			
+		/*if(raw.length == 4){
+			// Broadcast
+			if(raw[3] == "#"){
+				res = Optional.of( new RoutingKey(raw[0], raw[1], raw[2]) );
+			// UUID
+			} else 
+				res = Optional.of( new RoutingKey(raw[0], raw[1], raw[2], UUID.fromString(raw[3])) );
+			} else {
+				res = Optional.empty();
+			}
+		} else if(raw.length == 5){
+			if(raw[3].matches("[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[34][0-9a-fA-F]{3}-[89ab][0-9a-fA-F]{3}-[0-9a-fA-F]{12}")){
+				res = Optional.of( new RoutingKey(raw[0], raw[1], raw[2], UUID.fromString(raw[3]), raw[4]) );
+			} else {
+				res = Optional.empty();
+			}
+		}*/
+		
+		return res;
+		
+	}
+
+}

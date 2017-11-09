@@ -1,0 +1,7 @@
+package models.mensajes;
+
+import com.fasterxml.jackson.annotation.JsonProperty;
+
+public interface Message {
+	@JsonProperty("id_trabajo") public String getIdTrabajo();
+}

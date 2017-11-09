@@ -1,0 +1,33 @@
+package controllers;
+
+import models.entidades.Entidad;
+import models.entidades.Usuario;
+import play.api.libs.json.Json;
+import play.libs.F.Promise;
+import play.mvc.Controller;
+import play.mvc.Result;
+import play.mvc.Results;
+import play.api.libs.json.Writes;
+
+abstract class APILectura<T extends Entidad> extends Controller {
+	
+	public final servicios.DAO<T> dao;
+	public final Writes<T> conversor = new Writes<T>();
+	
+			public APILectura(servicios.DAO<T> d){
+		this.dao = d;		
+	}
+	
+	public Promise<Result> findById(String id){
+		Usuario u = (Usuario) dao.findByIdSync(id);
+		System.out.println("waiting for user");
+		return Results.ok( Json.toJson(u) );
+	}
+	
+	public Promise<Result> findByName(String name){
+		Promise<T> aa = dao.findByName(name);
+		System.out.println("waiting for user");
+		return aa.map( (T u) -> Results.ok( Json.toJson(u) ) );
+	}
+	
+}

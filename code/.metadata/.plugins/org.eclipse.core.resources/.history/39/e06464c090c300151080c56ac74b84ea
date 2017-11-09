@@ -1,0 +1,13 @@
+package servicios;
+
+import akka.actor.*;
+
+public class Agente extends UntypedActor {
+	public static Props props = Props.create(Agente.class);
+	public void onReceive(Object msg) throws Exception {
+        if (msg instanceof Agente.) {
+            sender().tell("Hello, " + ((SayHello) msg).name, self());
+        }
+    }
+
+}

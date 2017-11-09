@@ -1,0 +1,8 @@
+package models.entidades;
+
+public class Entorno implements Entidad {
+	
+	private java.util.List<Servicio> servicios;
+	//cocinado
+
+}

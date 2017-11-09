@@ -1,0 +1,11 @@
+package servicios;
+
+// Scala value class
+public class RoutingKey {
+	
+	static RoutingKey fromString(String str){
+		
+	}
+	
+
+}

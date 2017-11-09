@@ -1,0 +1,17 @@
+package models.entidades;
+
+import org.bson.types.ObjectId;
+import org.jongo.marshall.jackson.oid.MongoObjectId;
+
+public class Usuario extends Entidad {
+	
+	public Plan plan = new Plan();
+	
+	public Plan getPlan() {
+		return plan;
+	}
+	public void setPlan(Plan plan) {
+		this.plan = plan;
+	}
+	
+}

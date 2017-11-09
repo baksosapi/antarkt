@@ -1,0 +1,8 @@
+package servicios;
+
+import akka.actor.UntypedActor;
+
+public class Agente extends UntypedActor {
+	
+
+}

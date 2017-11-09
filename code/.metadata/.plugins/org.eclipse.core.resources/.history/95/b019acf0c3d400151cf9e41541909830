@@ -1,0 +1,14 @@
+package models.entidades;
+
+import org.immutables.value.Value;
+
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+
+@Value.Immutable
+@GenerarClase
+@JsonSerialize(as=UsuarioFactory.class)
+@JsonDeserialize(as=UsuarioFactory.class)
+public class Usuario extends Entidad {
+	public final Plan plan;
+}

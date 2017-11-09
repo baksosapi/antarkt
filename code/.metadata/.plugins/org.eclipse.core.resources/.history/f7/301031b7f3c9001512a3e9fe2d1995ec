@@ -1,0 +1,21 @@
+package controllers;
+
+import servicios.DAOUsuarios;
+import models.entidades.Usuario;
+import play.libs.F.Promise;
+import play.libs.Json;
+import play.mvc.Results;
+
+public class APIUsuarios extends APILectura<Usuario> {
+	
+	public APIUsuarios(){
+		this.setDao( new DAOUsuarios() );
+	}	
+	
+	public Promise<Result> insert(String name){
+		Promise<Usuario> result = this.dao.insert(name);
+		result.map( (Usuario u) -> Results.ok( Json.toJson(u)) )
+		
+	}
+	
+}

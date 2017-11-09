@@ -1,0 +1,51 @@
+package servicios;
+
+import play.libs.F;
+import play.libs.F.Promise;
+
+import javax.inject.Inject;
+import javax.inject.Singleton;
+
+import com.typesafe.config.Config;
+import com.typesafe.config.ConfigFactory;
+
+import models.entidades.Usuario;
+
+@Singleton
+public class DAOUsuarios implements DAO<Usuario> {
+	
+	Config config = ConfigFactory.load();
+	@Inject Mongo mongo;
+
+	@Override
+	public F.Promise<Usuario> findById(String id) {
+		Usuario u = mongo.getDatastore().get(Usuario.class, id);
+		if(u != null){
+			return Promise.pure(u);
+		} else {
+			return Promise.throwing(new Throwable("Not such id"));
+		}
+	}
+
+	@Override
+	public F.Promise<Usuario> findByName(String name) {
+		Usuario u = mongo.getDatastore().createQuery(Usuario.class).field("nombre").equal(name).get()
+		
+		System.out.println("derefing completion");
+		return promise;
+	}
+	
+	public F.Promise<Usuario> insert(String name) {
+		Usuario u = new Usuario();
+		u.setNombre(name);
+		mongo.getDatastore().save(u);
+		return Promise.pure(u);
+	}
+
+	/*@Override
+	public Promise<Usuario> saveSingle(Usuario object) {
+		// TODO Auto-generated method stub
+		return null;
+	}*/
+
+}

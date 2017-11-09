@@ -1,0 +1,95 @@
+package servicios;
+
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.security.KeyStore;
+import java.util.List;
+
+import javax.net.ssl.SSLContext;
+import javax.net.ssl.TrustManagerFactory;
+
+import com.rabbitmq.client.*;
+import com.rabbitmq.client.Address;
+
+import play.libs.Json;
+import scala.Option;
+import scala.PartialFunction;
+import scala.runtime.BoxedUnit;
+import akka.actor.*;
+import com.typesafe.config.*;
+
+// Recordar que Parra tiene que programar en Java tmb: DOCUMENTARS
+// Fuente de mensajes
+public class Rabbit implements Actor {
+	
+	private final String QUEUE_NAME = "panel";
+	private Config config;
+	
+	public void connect() throws Exception {
+		List<String> clusterAddresses = config.getStringList("rabbit.cluster");
+		int clusterPort = config.getInt("rabbit.port");
+		
+		//Si no están definidos los nodos, la conexión no va a suceder
+		assert clusterAddresses.size() == 3 : "Se requieren 3 nodos bajo la llave 'rabbit.cluster' en la configuración para enlazar al cluster. ";
+		
+	    ConnectionFactory factory = new ConnectionFactory();
+        char[] keyPassPhrase = "secret".toCharArray();
+        
+        KeyStore tks = KeyStore.getInstance("JKS");
+        tks.load(new FileInputStream("/home/mancvso/Antarkt/Certificates/rabbitmq/keycert.p12"), keyPassPhrase);            
+        TrustManagerFactory tmf = TrustManagerFactory.getInstance("SunX509");
+        tmf.init(tks);
+        SSLContext c = SSLContext.getInstance("TLS");
+        c.init(null, tmf.getTrustManagers(), null);
+
+        //TODO: activar cluster
+        factory.setUsername("santos");
+        factory.setPassword("rhino.metal.acid.cover");
+	    factory.useSslProtocol(c);
+	    Address[] cluster = { new Address(clusterAddresses.get(0), clusterPort), new Address(clusterAddresses.get(1), clusterPort), new Address(clusterAddresses.get(2), clusterPort)};
+	    
+	    Connection connection = factory.newConnection( cluster );
+	    Channel channel = connection.createChannel();
+
+	    // XXX: Si es pasiva, se asume que existe y se usa la configuración del servidor, de no existir, una exepción se lanza.
+	    // TODO: Es necesario garantizar que exista la cola antes de este punto
+	    channel.queueDeclarePassive(QUEUE_NAME);
+	    System.out.println(" [*] Procesando mensajes...");
+
+	    Consumer consumer = new DefaultConsumer(channel) {
+	      @Override
+	      public void handleDelivery(String consumerTag, Envelope envelope, AMQP.BasicProperties properties, byte[] body)
+	          throws IOException {
+	        String message = new String(body, "UTF-8");
+	        System.out.println(" [x] Received '" + message + "'" + "from key " + envelope.getRoutingKey() + " as JSON \n" + Json.parse(message) + "\n");
+	        
+	        //routingkey -> Clase
+	        // actor ! msg
+	        
+	      }
+	    };
+	    channel.basicConsume(QUEUE_NAME, true, consumer);
+	  }
+
+	@Override
+	public void postStop() throws Exception {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void preStart() throws Exception {
+		config = ConfigFactory.load();	
+	}
+
+	@Override
+	public PartialFunction<Object, BoxedUnit> receive() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	
+    
+    
+
+}

@@ -1,0 +1,28 @@
+package servicios;
+
+import java.util.UUID;
+
+// Scala value class
+
+/*
+ * Routing keys
+ * <organization>.<component>.<entity>.[ # | UUID ]
+ */
+public class RoutingKey {
+	public UUID uuid;
+	public String organization;
+	private boolean isBroadcast;
+	
+	private RoutingKey(String org, String comp, String ent, String dest){
+		this.organization = org;
+		this.
+	}
+	
+	static RoutingKey fromString(String str){
+		String[] raw = str.split(".");
+		if(raw.length == 4){
+			return new RoutingKey(raw[0], raw[1], raw[2], raw[3]);
+		}
+	}
+
+}

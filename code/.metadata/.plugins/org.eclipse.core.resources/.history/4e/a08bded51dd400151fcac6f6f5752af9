@@ -1,0 +1,11 @@
+package servicios.dao;
+
+import models.entidades.*;
+
+public class DAOUsuarios extends DAO<Usuario> {
+	
+	public DAOUsuarios(){
+		super("usuarios", ImmutableUsuario.class);
+	}
+
+}

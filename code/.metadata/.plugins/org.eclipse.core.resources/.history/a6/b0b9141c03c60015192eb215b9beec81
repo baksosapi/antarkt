@@ -1,0 +1,36 @@
+package servicios;
+/*
+
+MongoCursor<Friend> all = friends.find("{name: 'Joe'}").as(Friend.class);
+Friend one = friends.findOne("{name: 'Joe'}").as(Friend.class);*/
+
+import javax.inject.Singleton;
+
+import org.mongodb.morphia.Datastore;
+import org.mongodb.morphia.Morphia;
+import com.mongodb.*;
+
+
+MongoCollection friends = jongo.getCollection("friends");
+
+@Singleton
+public class Mongo {
+	
+	final Morphia morphia;
+	final Datastore datastore;
+	
+	final DB db;
+
+	Jongo jongo = new Jongo(db);
+	
+	
+	public Mongo(){
+		db = new MongoClient("localhost", 32768).getDB("panel");
+	}
+	
+	public Datastore getCollection(){
+		return this.datastore;
+	}
+	
+
+}

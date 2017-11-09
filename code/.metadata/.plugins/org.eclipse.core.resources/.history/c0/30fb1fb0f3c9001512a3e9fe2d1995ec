@@ -1,0 +1,12 @@
+package controllers;
+
+import servicios.DAOUsuarios;
+import models.entidades.Usuario;
+
+public class APIUsuarios extends APILectura<Usuario> {
+	
+	public APIUsuarios(){
+		this.setDao( new DAOUsuarios() );
+	}	
+	
+}

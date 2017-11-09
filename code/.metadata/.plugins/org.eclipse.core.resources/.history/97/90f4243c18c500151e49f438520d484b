@@ -1,0 +1,22 @@
+package servicios;
+/*
+
+MongoCursor<Friend> all = friends.find("{name: 'Joe'}").as(Friend.class);
+Friend one = friends.findOne("{name: 'Joe'}").as(Friend.class);*/
+
+import com.mongodb.MongoClient;
+import com.mongodb.client.MongoDatabase;
+
+import org.jongo.*;
+
+public class Mongo {
+	
+	public void connect(){
+		MongoDatabase db = new MongoClient().getDB("panel")
+
+		Jongo jongo = new Jongo(db);
+		MongoCollection usuarios = jongo.getCollection("usuarios");
+		
+	}
+
+}

@@ -1,0 +1,53 @@
+package servicios;
+
+import play.libs.F.Promise;
+
+import javax.inject.Singleton;
+
+import org.bson.Document;
+import org.bson.types.ObjectId;
+
+import com.mongodb.ConnectionString;
+import com.mongodb.async.client.*;
+import com.typesafe.config.Config;
+import com.typesafe.config.ConfigFactory;
+import org.mongojack.*;
+
+import models.entidades.Usuario;
+
+@Singleton
+public class DAOUsuarios implements DAO<Usuario> {
+	
+	Config config = ConfigFactory.load();
+	private MongoClient mongo = MongoClients.create( config.getString("mongo.url") );
+	private MongoDatabase db = mongo.getDatabase("panel");
+			
+	
+	//private Jongo jongo = new Jongo((DB) db);
+	public MongoCollection usuariosMongo = db.getCollection("usuarios");
+	public JacksonDBCollection<Usuario, String> usuarios = JacksonDBCollection.wrap(usuariosMongo, Usuario.class, String.class);
+	
+
+	public Promise<Usuario> crear(String nombre) {
+		Usuario u = new Usuario();
+		u.setNombre(nombre);
+		return Promise.promise( () -> usuarios.insert(u)).map( (wr) ->  u );
+	}
+
+	@Override
+	public Promise<Usuario> findById(ObjectId id) {
+		return Promise.promise(() -> usuarios.findOne(id).as(Usuario.class) );
+	}
+
+	@Override
+	public Promise<Usuario> findByName(String name) {
+		return Promise.promise(() -> usuarios.findOne("{name: #", name).as(Usuario.class) );
+	}
+
+	@Override
+	public Promise<Usuario> saveSingle(Usuario object) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+}

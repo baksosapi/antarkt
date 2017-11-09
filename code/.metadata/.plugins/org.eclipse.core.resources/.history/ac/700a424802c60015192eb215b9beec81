@@ -1,0 +1,22 @@
+package models.entidades;
+
+import java.time.LocalDate;
+
+import org.mongodb.morphia.annotations.Embedded;
+
+@Embedded
+public class Plan {
+	public java.util.Date inicio;
+	public TipoDePlan plan;
+	
+	public Plan(){
+		this.plan = TipoDePlan.Gratuito;
+		this.inicio = new java.util.Date()
+	}
+	
+	
+	public enum TipoDePlan {
+		Gratuito, Tier1, Tier2, Tier3, Custom
+	}
+
+}

@@ -1,0 +1,7 @@
+package models.entidades;
+
+abstract class Usuario extends Entidad {
+	
+	public Plan getPlan();
+	
+}

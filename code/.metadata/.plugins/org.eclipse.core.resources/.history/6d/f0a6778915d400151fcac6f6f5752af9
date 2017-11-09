@@ -1,0 +1,14 @@
+package models.entidades;
+
+import org.jongo.marshall.jackson.oid.MongoObjectId;
+
+public abstract class Entidad {
+	
+	@MongoObjectId
+	private String id;
+	
+	public abstract String getNombre();
+	public abstract String getId();
+	public abstract LocalDate getCreadoEn();
+	
+}

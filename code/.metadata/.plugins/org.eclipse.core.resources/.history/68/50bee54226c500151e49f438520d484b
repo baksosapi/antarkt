@@ -1,0 +1,6 @@
+package models.Entidades;
+
+// Cada operación a realizar por el agente, con estado almacenado en la BD
+public class Accion {
+
+}
